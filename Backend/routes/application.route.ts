@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { applyApplicationHandler , getFilledApplication , getAllApplication , updateApplicationHandler ,getStatus} from "../controllers/application.controller";
+import { applyApplicationHandler , getFilledApplication , getAllApplication , updateApplicationHandler ,getStatus,withdrawApplicationHandler} from "../controllers/application.controller";
 import { authenticate } from "../middlewares/auth.middleware";
 import { applicationSchema, updateApplicationSchema, validate } from "./../middlewares/validation.middleware.ts";
 const router = Router();
@@ -9,5 +9,6 @@ router.get("/filled" ,authenticate, getFilledApplication);
 router.get("/all",authenticate , getAllApplication);
 router.put("/update" , authenticate, validate(updateApplicationSchema),updateApplicationHandler);
 router.get("/status" , authenticate,getStatus);
+router.delete("/withdraw", authenticate, withdrawApplicationHandler);
 
 export default router;

@@ -18,6 +18,12 @@ const applicationSchema = new mongoose.Schema(
         "Invalid roll number format (eg: 25cs3013)",
       ],
     },
+    MobileNo: {
+      type: String,
+      required: true,
+      trim: true,
+      match: [/^[0-9]{10}$/, "Invalid mobile number format (eg: 9876543210)"],
+    },
 
     preference1: {
       type: String,
@@ -35,6 +41,12 @@ const applicationSchema = new mongoose.Schema(
       enum: ["Technical Team", "Design Team", "Media Team"],
     },
 
+    skills: [
+      {
+        type: String,
+      },
+    ],
+
     reason: {
       type: String,
       required: true,
@@ -42,21 +54,26 @@ const applicationSchema = new mongoose.Schema(
       minlength: 10,
     },
 
+    OtherClubs: [
+      {
+        type: String,
+      },
+    ],
+
     status: {
       type: String,
       enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
-    
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 applicationSchema.index({ user: 1 });
 applicationSchema.index({ rollNo: 1 });
 
-const Application =  mongoose.model("Application", applicationSchema);
+const Application = mongoose.model("Application", applicationSchema);
 
 export default Application;

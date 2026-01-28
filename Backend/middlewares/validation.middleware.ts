@@ -25,15 +25,13 @@ export const validate = (schema: ZodSchema) => {
   };
 };
 
-
-
 export const signupSchema = z.object({
   body: z.object({
     email: z
       .string()
       .regex(
         /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
-        "Email must be of form 24cs3063@rgipt.ac.in"
+        "Email must be of form 24cs3063@rgipt.ac.in",
       ),
 
     password: z
@@ -52,7 +50,7 @@ export const adminSignupSchema = z.object({
       .string()
       .regex(
         /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
-        "Email must be of form 24cs3063@rgipt.ac.in"
+        "Email must be of form 24cs3063@rgipt.ac.in",
       ),
 
     password: z
@@ -63,10 +61,9 @@ export const adminSignupSchema = z.object({
       .regex(/[^A-Za-z0-9]/, "One special character required"),
 
     name: z.string().min(2).max(50),
-    adminSecret:z.string().min(2)
+    adminSecret: z.string().min(2),
   }),
 });
-
 
 export const loginSchema = z.object({
   body: z.object({
@@ -74,7 +71,6 @@ export const loginSchema = z.object({
     password: z.string().min(1, "Password required"),
   }),
 });
-
 
 export const googleLoginSchema = z.object({
   body: z.object({
@@ -88,22 +84,28 @@ export const refreshTokenSchema = z.object({
   }),
 });
 
-const teams = ["Technical Team" , "Design Team" , "Media Team"];
+const teams = ["Technical Team", "Design Team", "Media Team"];
 
 export const applicationSchema = z.object({
-  body:z.object({
-    preference1:z.enum(teams),
-    preference2:z.enum(teams),
-    preference3:z.enum(teams),
+  body: z
+    .object({
+      MobileNo: z.string().length(10),
 
-    reason:z.string().trim().min(10)
-  })
-  .superRefine((data, ctx) => {
-      const prefs = [
-        data.preference1,
-        data.preference2,
-        data.preference3,
-      ];
+      preference1: z.enum(teams),
+      preference2: z.enum(teams),
+      preference3: z.enum(teams),
+
+      reason: z.string().trim().min(10),
+
+      skills: z
+        .array(z.string().trim())
+        .min(1, "At least one skill is required"),
+
+      otherClubs: z.array(z.string().trim()).optional(),
+    })
+
+    .superRefine((data, ctx) => {
+      const prefs = [data.preference1, data.preference2, data.preference3];
 
       const uniquePrefs = new Set(prefs);
 
@@ -115,14 +117,13 @@ export const applicationSchema = z.object({
         });
       }
     }),
-})
-
+});
 
 const status = ["pending", "accepted", "rejected"];
 
 export const updateApplicationSchema = z.object({
-  body:z.object({
-    userId : z.string(),
-    newStatus: z.enum(status)
-  })
-})
+  body: z.object({
+    userId: z.string(),
+    newStatus: z.enum(status),
+  }),
+});

@@ -2,7 +2,7 @@ import Application from "../models/Application.model";
 import User from "../models/User.model";
 
 
-export const createApplication = async (userId :string , body:{preference1 :string , preference2:string , preference3:string ,reason:string} )=>{
+export const createApplication = async (userId :string , body:{MobileNo:string , preference1 :string , preference2:string , preference3:string ,reason:string , skills:string[] , OtherClubs:string[]} )=>{
     const user = await User.findById(userId);
     const rollNo = user?.email.substring(0,8);
     const form = await Application.create({
@@ -23,3 +23,6 @@ export const allApplication = async()=>{
     return await Application.find();
 }
 
+export const deleteForm = async(userId:string)=>{
+    await Application.deleteMany({user:userId})
+}

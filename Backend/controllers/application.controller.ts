@@ -1,5 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import { allApplication, createApplication, getexistingApplication } from "../services/Application.service";
+import {
+  allApplication,
+  createApplication,
+  deleteForm,
+  getexistingApplication,
+} from "../services/Application.service";
 
 export const applyApplicationHandler = async (
   req: Request,
@@ -7,7 +12,6 @@ export const applyApplicationHandler = async (
   next: NextFunction,
 ) => {
   try {
-
     const body = req.body;
     const userId = req.userId;
     const role = req.role;
@@ -35,15 +39,12 @@ export const applyApplicationHandler = async (
       });
     }
 
-    
-
     const form = await createApplication(userId, body);
 
     res.status(201).json({
       sucess: true,
       form,
     });
-
   } catch (err) {
     next(err);
   }
@@ -63,7 +64,6 @@ export const getFilledApplication = async (
         message: "User ID is required",
       });
     }
-
 
     if (role === "ADMIN") {
       return res.status(403).json({
@@ -154,7 +154,7 @@ export const updateApplicationHandler = async (
 ) => {
   try {
     const role = req.role;
-    const { newStatus , userId } = req.body;
+    const { newStatus, userId } = req.body;
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -185,6 +185,39 @@ export const updateApplicationHandler = async (
       success: true,
       message: "Status updated",
       form,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+export const withdrawApplicationHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.userId;
+    const role = req.role;
+
+    if (role === "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        message: "Admins can't delete the form",
+      });
+    }
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    await deleteForm(userId);
+
+    res.status(201).json({
+      sucess: true,
+      message:"You application has been deleted",
     });
   } catch (err) {
     next(err);
