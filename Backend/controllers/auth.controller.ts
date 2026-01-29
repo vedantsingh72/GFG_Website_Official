@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 
 import * as authService from "../services/auth.service.ts";
+import User from "../models/User.model.ts";
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -213,42 +214,93 @@ export const logout = async (req: Request, res: Response) => {
   });
 };
 
+
+
+
+
+
+export const adminLoginHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email, password, adminSecret } = req.body;
+
+    const expectedSecret = process.env.ADMIN_SIGNUP_SECRET || process.env.ADMIN_SIGNUP_SECRET;
+    if (!expectedSecret || adminSecret !== expectedSecret) {
+      return res.status(401).json({ success: false, message: "Invalid admin secret key" });
+    }
+
+    const user = await User.findOne({ email, role: "ADMIN" });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Admin not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.hashedPassword || "");
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: "Invalid password" });
+    }
+
+    const accessToken = generateAccessToken({ id: user._id.toString(), role: user.role });
+    const refreshToken = generateRefreshToken({ id: user._id.toString(), role: user.role });
+
+    res.json({
+      success: true,
+      message: "Admin login successful",
+      user: {
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+
 export const adminSignupHandler = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { email, password, name , adminSecret} = req.body;
+    const { name, email, password, adminSecret } = req.body;
 
-    if (adminSecret !== process.env.ADMIN_SIGNUP_SECRET) {
-      return res.status(403).json({
-        success: false,
-        message: "Unauthorized",
-      });
+    // Check secret key
+    const expectedSecret = process.env.ADMIN_SIGNUP_SECRET;
+    if (!expectedSecret || adminSecret !== expectedSecret) {
+      return res.status(401).json({ success: false, message: "Invalid admin secret key" });
     }
 
-    const existingUser = await authService.findUserByEmail(email);
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Email already exists" });
+    // Check if admin already exists
+    const existingAdmin = await User.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).json({ success: false, message: "Admin already exists" });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await authService.createUser(email, hashedPassword, name,"ADMIN");
-
-    const accessToken = generateAccessToken({ id: user._id.toString(), role: user.role });
-    const refreshToken = generateRefreshToken({ id: user._id.toString(), role: user.role });
-
-    res.status(201).json({
-      success: true,
-      user,
-      accessToken,
-      refreshToken,
+    // Create admin user
+    const admin = await User.create({
+      name,
+      email,
+      hashedPassword,
+      role: "ADMIN",
     });
-  } catch (error) {
-    next(error);
+
+    res.json({
+      success: true,
+      message: "Admin created successfully",
+      admin: { email: admin.email, name: admin.name },
+    });
+  } catch (err) {
+    next(err);
   }
 };
