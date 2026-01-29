@@ -39,21 +39,6 @@ export const signupSchema = z.object({
     name: z.string().min(2).max(50),
   }),
 });
-export const adminSignupSchema = z.object({
-  body: z.object({
-    email: z.string().email(),
-
-    password: z
-      .string()
-      .min(6, "Minimum 6 characters")
-      .regex(/[A-Z]/, "One uppercase required")
-      .regex(/[0-9]/, "One number required")
-      .regex(/[^A-Za-z0-9]/, "One special character required"),
-
-    name: z.string().min(2).max(50),
-    adminSecret: z.string().min(2),
-  }),
-});
 
 export const loginSchema = z.object({
     body: z.object({
@@ -115,5 +100,45 @@ export const updateApplicationSchema = z.object({
   body: z.object({
     userId: z.string(),
     newStatus: z.enum(status),
+  }),
+});
+
+
+export const adminLoginSchema = z.object({
+  body: z.object({
+    email: z
+      .string()
+      .regex(
+        /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
+        "Invalid admin email"
+      ),
+
+    password: z.string().min(1, "Password required"),
+
+    adminSecret: z.string().min(1, "Admin secret required"),
+  }),
+});
+
+
+
+
+
+
+
+
+
+export const adminSignupSchema = z.object({
+  body: z.object({
+    name: z.string().min(2).max(50),
+    email: z
+      .string()
+      .regex(/^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/, "Email must be of form 24cs3063@rgipt.ac.in"),
+    password: z
+      .string()
+      .min(6, "Minimum 6 characters")
+      .regex(/[A-Z]/, "One uppercase required")
+      .regex(/[0-9]/, "One number required")
+      .regex(/[^A-Za-z0-9]/, "One special character required"),
+    adminSecret: z.string().min(2, "Admin secret is required"),
   }),
 });
