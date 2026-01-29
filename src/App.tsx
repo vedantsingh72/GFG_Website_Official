@@ -10,6 +10,9 @@ import PastEvents from "./pages/pastEvents";
 import UpcomingEvents from "./pages/upcomingEvent";
 import Resources from "./pages/resources";
 import JoinGFG from "./pages/joinGFG";
+import AdminLogin from "./pages/adminlogin";
+import AdminSignup from "./pages/adminsignup";
+import AdminPage from "./pages/adminhain";
 
 
 
@@ -24,8 +27,11 @@ const App = () => {
    <Route path="/upcomingEvents" element={<UpcomingEvents />} />
    <Route path="/resources" element={<Resources />} />
    <Route path="/joinGFG" element={<JoinGFG />} />
+   <Route path="/admin/signup" element={<AdminSignup />} />
   <Route path="/login" element={<LoginForm />} />
   <Route path="/signup" element={<SignupForm />} />
+  <Route path="/admin/login" element={<AdminLogin />} />
+  <Route path="/adminhain" element={<AdminPage />} />
 
   <Route
     path="/home"
