@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface CardProps {
@@ -7,62 +6,46 @@ interface CardProps {
   link: string;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, link }) => {
+const Card = ({ title, description, link }: CardProps) => {
   const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(link);
-  };
-
-  const cardStyle: React.CSSProperties = {
-    border: "1px solid #ddd",
-    borderRadius: "10px",
-    padding: "20px",
-    width: "220px",
-    textAlign: "center",
-    cursor: "pointer",
-    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-    transition: "all 0.2s ease-in-out",
-    margin: "10px",
-  };
-
-  const hoverStyle: React.CSSProperties = {
-    transform: "translateY(-5px)",
-    boxShadow: "0 8px 12px rgba(0,0,0,0.2)",
-  };
-
-  const titleStyle: React.CSSProperties = {
-    marginBottom: "10px",
-    fontSize: "1.3rem",
-  };
-
-  const descriptionStyle: React.CSSProperties = {
-    marginBottom: "15px",
-    color: "#555",
-    fontSize: "0.95rem",
-  };
-
-  const buttonStyle: React.CSSProperties = {
-    padding: "8px 16px",
-    border: "none",
-    backgroundColor: "#007bff",
-    color: "white",
-    borderRadius: "6px",
-    cursor: "pointer",
-  };
-
-  const [isHovered, setIsHovered] = React.useState(false);
 
   return (
     <div
-      style={{ ...cardStyle, ...(isHovered ? hoverStyle : {}) }}
-      onClick={handleClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => navigate(link)}
+      className="
+        relative w-[260px] cursor-pointer rounded-2xl p-6
+        bg-black/60 backdrop-blur-xl
+        border border-green-500/40
+        shadow-[0_0_30px_rgba(34,197,94,0.25)]
+        transition-all duration-300
+        hover:scale-105
+        hover:shadow-[0_0_60px_rgba(34,197,94,0.6)]
+        group
+      "
     >
-      <h2 style={titleStyle}>{title}</h2>
-      <p style={descriptionStyle}>{description}</p>
-      <button style={buttonStyle}>Go</button>
+      {/* Glow aura */}
+      <div className="absolute inset-0 rounded-2xl blur-xl bg-green-500/20 opacity-0 group-hover:opacity-100 transition -z-10" />
+
+      <h2 className="text-green-400 text-xl font-bold mb-2 tracking-wide">
+        {title}
+      </h2>
+
+      <p className="text-gray-400 text-sm mb-5">
+        {description}
+      </p>
+
+      <button
+        className="
+          px-4 py-2 rounded-lg
+          bg-gradient-to-r from-green-700 via-green-500 to-green-400
+          text-black font-semibold text-sm
+          shadow-[0_0_20px_rgba(34,197,94,0.6)]
+          group-hover:shadow-[0_0_35px_rgba(34,197,94,0.9)]
+          transition
+        "
+      >
+        Open
+      </button>
     </div>
   );
 };

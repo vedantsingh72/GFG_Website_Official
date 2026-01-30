@@ -1,63 +1,38 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/authContext";
 
-const Dashboard: React.FC = () => {
-  const headerStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "15px 30px",
-    backgroundColor: "#007bff",
-    color: "white",
-    fontFamily: "Arial, sans-serif",
-    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-  };
-
-  const logoStyle: React.CSSProperties = {
-    fontSize: "1.8rem",
-    fontWeight: "bold",
-    cursor: "pointer",
-  };
-
-  const navStyle: React.CSSProperties = {
-    display: "flex",
-    gap: "20px",
-  };
-
-  const linkStyle: React.CSSProperties = {
-    color: "white",
-    textDecoration: "none",
-    fontSize: "1rem",
-    fontWeight: 500,
-  };
-
-  const linkHoverStyle: React.CSSProperties = {
-    textDecoration: "underline",
-  };
-
-  const [hoveredLink, setHoveredLink] = React.useState<string | null>(null);
+const Dashboard = () => {
+  const { user } = useAuth();
 
   return (
-    <header style={headerStyle}>
-      <div style={logoStyle}>GFG</div>
-      <nav style={navStyle}>
-        <Link
-          to="/about"
-          style={{ ...linkStyle, ...(hoveredLink === "about" ? linkHoverStyle : {}) }}
-          onMouseEnter={() => setHoveredLink("about")}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          About
-        </Link>
-        <Link
-          to="/contact"
-          style={{ ...linkStyle, ...(hoveredLink === "contact" ? linkHoverStyle : {}) }}
-          onMouseEnter={() => setHoveredLink("contact")}
-          onMouseLeave={() => setHoveredLink(null)}
-        >
-          Contact
-        </Link>
-      </nav>
+    <header className="w-full h-[72px] bg-black/80 backdrop-blur-xl border-b border-green-500/30">
+      <div className="h-full max-w-7xl mx-auto px-6 flex items-center justify-between">
+        
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-green-500/20 flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.6)]">
+            <span className="text-green-400 font-bold text-sm">GFG</span>
+          </div>
+          <span className="text-green-400 text-lg font-bold tracking-wide">
+            GFG RGIPT
+          </span>
+        </div>
+
+        {/* Nav */}
+        <nav className="flex items-center gap-8 text-sm font-medium">
+          <Link to="/about" className="text-gray-300 hover:text-green-400">About</Link>
+          <Link to="/contact" className="text-gray-300 hover:text-green-400">Contact</Link>
+          <Link to="/events" className="text-gray-300 hover:text-green-400">Events</Link>
+          <Link to="/members" className="text-gray-300 hover:text-green-400">Members</Link>
+        </nav>
+
+        {/* User */}
+        {user && (
+          <div className="px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30 text-sm text-green-400">
+            {user.name}
+          </div>
+        )}
+      </div>
     </header>
   );
 };
