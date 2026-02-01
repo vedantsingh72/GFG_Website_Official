@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginForm from "./components/loginform";
-import SignupForm from "./components/signupform";
+import LoginForm from "./pages/login";
+import SignupForm from "./pages/signup";
 import AuthBack from "./auth/authBack";
 import { Navigate } from "react-router-dom";
 import Home from "./pages/home";
