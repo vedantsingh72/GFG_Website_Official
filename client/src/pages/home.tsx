@@ -1,5 +1,6 @@
 import Card from "../components/card";
 import Dashboard from "../components/dashboard";
+import Contact from "../components/contact";
 
 const cardsData = [
   { title: "About", description: "Learn more about us", link: "/about" },
@@ -42,6 +43,8 @@ const Home = () => {
           </div>
         </div>
       </main>
+
+      <Contact/>
     </div>
   );
 };
