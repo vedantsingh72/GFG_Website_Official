@@ -96,11 +96,14 @@ export const applicationSchema = z.object({
 
 const status = ["pending", "accepted", "rejected"];
 
+const fieldTypes = ["text", "email", "number", "select", "checkbox", "textarea", "date"];
+
 export const updateApplicationSchema = z.object({
   body: z.object({
     userId: z.string(),
     newStatus: z.enum(status),
   }),
+
 });
 
 
@@ -140,5 +143,70 @@ export const adminSignupSchema = z.object({
       .regex(/[0-9]/, "One number required")
       .regex(/[^A-Za-z0-9]/, "One special character required"),
     adminSecret: z.string().min(2, "Admin secret is required"),
+  }),
+});
+
+
+export const createEventSchema = z.object({
+  body: z.object({
+    title: z.string().min(3, "Title is required"),
+
+    description: z.string().min(10, "Description is required"),
+
+    deadline: z
+      .string()
+      .datetime()
+      .optional(),
+
+    fields: z
+      .array(
+        z.object({
+          label: z.string().min(1),
+          name: z.string().min(1),
+          type: z.enum(fieldTypes),
+          required: z.boolean().optional(),
+          options: z.array(z.string()).optional(),
+        })
+      )
+      .min(1, "At least one field is required"),
+  }),
+});
+
+
+export const updateEventSchema = z.object({
+  params: z.object({
+    eventId: z.string(),
+  }),
+
+  body: z.object({
+    title: z.string().min(3).optional(),
+
+    description: z.string().min(10).optional(),
+
+    deadline: z
+      .string()
+      .datetime()
+      .optional(),
+
+    isActive: z.boolean().optional(),
+
+    fields: z
+      .array(
+        z.object({
+          label: z.string().min(1),
+          name: z.string().min(1),
+          type: z.enum(fieldTypes),
+          required: z.boolean().optional(),
+          options: z.array(z.string()).optional(),
+        })
+      )
+      .optional(),
+  }),
+});
+
+
+export const registerEventSchema = z.object({
+  body: z.object({
+    responses: z.record(z.string(), z.any()),
   }),
 });

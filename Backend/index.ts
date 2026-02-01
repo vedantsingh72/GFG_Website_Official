@@ -6,6 +6,7 @@ dotenv.config();
 import connectDB from "./config/db";
 import AuthRouter from "./routes/auth.route";
 import ApplicationRouter from "./routes/application.route";
+import EventRouter from "./routes/event.route";
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.get("helth" , (req:Request , res:Response)=>{
 
 app.use("/api/auth" , AuthRouter);
 app.use("/api/application" , ApplicationRouter);
+app.use("/api/event" , EventRouter);
 
 
 app.use((err :any , req :Request, res:Response, next:NextFunction) => {
