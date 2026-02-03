@@ -13,7 +13,7 @@ import JoinGFG from "./pages/joinGFG";
 import AdminLogin from "./pages/adminlogin";
 import AdminSignup from "./pages/adminsignup";
 import AdminPage from "./pages/adminhain";
-
+import Admin from "./pages/admin";
 
 
 const App = () => {
@@ -32,6 +32,7 @@ const App = () => {
   <Route path="/signup" element={<SignupForm />} />
   <Route path="/admin/login" element={<AdminLogin />} />
   <Route path="/adminhain" element={<AdminPage />} />
+  <Route path="/admin" element={<Admin/>}/>
 
   <Route
     path="/home"
