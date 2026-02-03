@@ -24,6 +24,14 @@ const Dashboard = () => {
           <Link to="/contact" className="text-gray-300 hover:text-green-400">Contact</Link>
           <Link to="/events" className="text-gray-300 hover:text-green-400">Events</Link>
           <Link to="/members" className="text-gray-300 hover:text-green-400">Members</Link>
+
+          {/* Admin Button */}
+          <Link
+            to="/adminhain"
+            className="px-4 py-1.5 rounded-full bg-green-500 text-black font-semibold hover:bg-green-400 transition"
+          >
+            Admin
+          </Link>
         </nav>
 
         {/* User */}
