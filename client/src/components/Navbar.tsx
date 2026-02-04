@@ -24,7 +24,7 @@ const Navbar = () => {
 
         {/* Nav Links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          {["ABOUT", "EVENTS", "TEAM", "JOIN", "RESOURCES", "CONTACT"].map(
+          {["ADMIN", "EVENTS", "TEAM", "JOIN", "RESOURCES", "CONTACT"].map(
             (item) => (
               <Link
                 key={item}
