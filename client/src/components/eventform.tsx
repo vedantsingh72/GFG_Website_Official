@@ -16,29 +16,42 @@ const EventForm = () => {
     ]);
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("deadline", deadline);
-    formData.append("fields", JSON.stringify(fields));
-    if (image) formData.append("image", image);
+  
+    const handleSubmit = async () => {
+  if (!deadline) {
+    alert("Deadline is required");
+    return;
+  }
 
-    try {
-      await createEvent(formData);
-      alert("Event created successfully");
-      setTitle("");
-      setDescription("");
-      setDeadline("");
-      setFields([]);
-      setImage(null);
-    } catch (err: any) {
-      alert(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+
+  const isoDeadline = new Date(
+    deadline + "T00:00:00.000Z"
+  ).toISOString();
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description);
+  formData.append("deadline", isoDeadline);
+  formData.append("fields", JSON.stringify(fields));
+  if (image) formData.append("image", image);
+
+  try {
+    await createEvent(formData);
+    alert("Event created successfully");
+    setTitle("");
+    setDescription("");
+    setDeadline("");
+    setFields([]);
+    setImage(null);
+  } catch (err: any) {
+    alert(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
 
   return (
     <div className="relative w-[520px] rounded-[28px] p-8 md:p-10">
@@ -95,7 +108,7 @@ const EventForm = () => {
               Registration Fields
             </p>
 
-            {fields.map((field, i) => (
+            {fields.map((_, i) => (
               <div key={i} className="flex gap-2 mb-3">
                 <input
                   placeholder="Label"

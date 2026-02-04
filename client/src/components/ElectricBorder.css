@@ -1,0 +1,100 @@
+.electric-border {
+  /* Derived lighter glow from main color */
+  --electric-light-color: oklch(from var(--electric-border-color) l c h);
+
+  position: relative;
+  border-radius: inherit;
+  overflow: visible;
+  isolation: isolate;
+
+  /* Subtle dark tech background for cards/sections */
+  background: radial-gradient(
+    circle at top,
+    rgba(34, 197, 94, 0.06),
+    rgba(2, 6, 23, 0.95)
+  );
+}
+
+/* Canvas wrapper */
+.eb-canvas-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.eb-canvas {
+  display: block;
+}
+
+/* Content layer */
+.eb-content {
+  position: relative;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+/* Glow layers */
+.eb-layers {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.eb-glow-1,
+.eb-glow-2,
+.eb-background-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Inner glow (sharp edge) */
+.eb-glow-1 {
+  border: 1.5px solid oklch(from var(--electric-border-color) l c h / 0.7);
+  filter: blur(0.8px);
+  opacity: 0.9;
+}
+
+/* Outer glow (soft neon) */
+.eb-glow-2 {
+  border: 2px solid var(--electric-light-color);
+  filter: blur(6px);
+  opacity: 0.85;
+}
+
+/* Background ambient glow */
+.eb-background-glow {
+  z-index: -1;
+  transform: scale(1.12);
+  filter: blur(42px);
+  opacity: 0.35;
+  background: linear-gradient(
+    -30deg,
+    var(--electric-light-color),
+    transparent 40%,
+    var(--electric-border-color)
+  );
+}
+
+/* ✨ Optional hover polish (feels premium) */
+.electric-border:hover .eb-glow-1 {
+  opacity: 1;
+  filter: blur(1.2px);
+}
+
+.electric-border:hover .eb-glow-2 {
+  filter: blur(10px);
+  opacity: 1;
+}
+
+.electric-border:hover .eb-background-glow {
+  opacity: 0.5;
+  transform: scale(1.15);
+}
