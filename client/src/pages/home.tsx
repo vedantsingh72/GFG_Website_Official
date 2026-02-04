@@ -52,8 +52,6 @@ const Home = () => {
     <div className="relative min-h-screen bg-black text-white selection:bg-green-500/30 font-sans overflow-x-hidden">
       <main className="relative">
         <section className=" top-0 relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
-          
-
           <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-500/20 bg-green-500/5 mb-8">
               <span className="relative flex h-2 w-2">
@@ -95,24 +93,20 @@ const Home = () => {
         </section>
 
         <section className="relative py-24 bg-[#050505] overflow-hidden">
-
-          {/* Top Sliding Bar with Gradient Mask */}
           <div className="relative mb-16 flex overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-            <div className="flex animate-loop-scroll items-center gap-16 py-4 min-w-max">
-              {/* First set of icons */}
+            <div className="flex animate-loop-scroll items-center gap-16 py-4 w-max">
               {icons.map((icon, i) => (
                 <div
-                  key={`top-1-${i}`}
-                  className="flex-shrink-0 text-gray-600 text-4xl hover:text-green-500 transition-colors"
+                  key={`set1-${i}`}
+                  className="text-gray-600 text-4xl hover:text-green-500 transition-colors flex-shrink-0"
                 >
                   {icon}
                 </div>
               ))}
-              {/* Duplicate set for seamless loop */}
               {icons.map((icon, i) => (
                 <div
-                  key={`top-2-${i}`}
-                  className="flex-shrink-0 text-gray-600 text-4xl hover:text-green-500 transition-colors"
+                  key={`set2-${i}`}
+                  className="text-gray-600 text-4xl hover:text-green-500 transition-colors flex-shrink-0"
                 >
                   {icon}
                 </div>
