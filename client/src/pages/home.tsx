@@ -15,6 +15,7 @@ import {
   SiNodedotjs,
   SiPrisma,
 } from "react-icons/si";
+import GlowBlob from "@/components/GlowBlob";
 
 const icons = [
   <SiReact />,
