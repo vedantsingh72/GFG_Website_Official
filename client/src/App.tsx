@@ -13,35 +13,27 @@ import JoinGFG from "./pages/joinGFG";
 import AdminLogin from "./pages/adminlogin";
 import AdminSignup from "./pages/adminsignup";
 import AdminPage from "./pages/adminhain";
-
-
-
+import Navbar from "./components/Navbar";
 const App = () => {
   return (
     <BrowserRouter>
-     +<Routes>
-  <Route path="/" element={<Navigate to="/signup" />} />
-   <Route path="/about" element={<About />} />
-   <Route path="/teams" element={<Team />} />
-   <Route path="/pastEvents" element={<PastEvents/>} />
-   <Route path="/upcomingEvents" element={<UpcomingEvents />} />
-   <Route path="/resources" element={<Resources />} />
-   <Route path="/joinGFG" element={<JoinGFG />} />
-   <Route path="/admin/signup" element={<AdminSignup />} />
-  <Route path="/login" element={<LoginForm />} />
-  <Route path="/signup" element={<SignupForm />} />
-  <Route path="/admin/login" element={<AdminLogin />} />
-  <Route path="/adminhain" element={<AdminPage />} />
+       <Navbar />
+      <Routes>
+        <Route path="/" element={<Navigate to="/signup" />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/pastEvents" element={<PastEvents />} />
+        <Route path="/upcomingEvents" element={<UpcomingEvents />} />
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/joinGFG" element={<JoinGFG />} />
+        <Route path="/admin/signup" element={<AdminSignup />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/adminhain" element={<AdminPage />} />
 
-  <Route
-    path="/home"
-    element={
-      <AuthBack>
-        <Home/>
-      </AuthBack>
-    }
-  />
-</Routes>
+        <Route path="/home" element={<Home />} />
+      </Routes>
     </BrowserRouter>
   );
 };
