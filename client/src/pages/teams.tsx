@@ -1,8 +1,9 @@
 import React from 'react'
+import TeamContent from '../components/TeamContent'
 
 const teams = () => {
   return (
-    <div>teams</div>
+    <TeamContent/>
   )
 }
 
