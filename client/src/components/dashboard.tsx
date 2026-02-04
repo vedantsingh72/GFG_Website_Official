@@ -20,7 +20,7 @@ const Dashboard = () => {
 
         {/* Nav */}
         <nav className="flex items-center gap-8 text-sm font-medium">
-          <Link to="/about" className="text-gray-300 hover:text-green-400">About</Link>
+          <Link to="/about" className="text-gray-300 hover:text-green-400">Ab</Link>
           <Link to="/contact" className="text-gray-300 hover:text-green-400">Contact</Link>
           <Link to="/events" className="text-gray-300 hover:text-green-400">Events</Link>
           <Link to="/members" className="text-gray-300 hover:text-green-400">Members</Link>
