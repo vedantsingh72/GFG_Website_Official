@@ -14,6 +14,7 @@ import AdminLogin from "./pages/adminlogin";
 import AdminSignup from "./pages/adminsignup";
 import AdminPage from "./pages/adminhain";
 import Navbar from "./components/Navbar";
+
 const App = () => {
   return (
     <BrowserRouter>

@@ -9,7 +9,7 @@ export default {
       keyframes: {
         "loop-scroll": {
           from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" }, // Use -50% for duplicated lists
+          to: { transform: "translateX(-50%)" },
         },
       },
     },
