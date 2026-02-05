@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { createEvent } from "../services/event";
+import { createEvent } from "../services/event.service";
 
 type FieldType = "text" | "select" | "textarea" | "checkbox";
 
 interface Field {
   label: string;
-  name: string; 
+  name: string;
   type: FieldType;
   required: boolean;
   options?: string[];
@@ -51,7 +51,10 @@ const EventCreatorForm = ({ token }: { token: string }) => {
   const [errors, setErrors] = useState<Errors>({});
 
   const addField = () =>
-    setFields((p) => [...p, { label: "", name: "", type: "text", required: false, options: [] }]);
+    setFields((p) => [
+      ...p,
+      { label: "", name: "", type: "text", required: false, options: [] },
+    ]);
 
   const updateField = (i: number, key: keyof Field, value: any) => {
     setFields((prev) => {
@@ -59,7 +62,9 @@ const EventCreatorForm = ({ token }: { token: string }) => {
 
       if (key === "label") {
         const base = toKey(value || "");
-        const existing = new Set(next.map((f, idx) => (idx === i ? "" : f.name)).filter(Boolean));
+        const existing = new Set(
+          next.map((f, idx) => (idx === i ? "" : f.name)).filter(Boolean),
+        );
         const name = base ? uniqueKey(base, existing) : "";
         next[i] = { ...next[i], label: value, name };
       } else {
@@ -70,12 +75,14 @@ const EventCreatorForm = ({ token }: { token: string }) => {
     });
   };
 
-  const removeField = (i: number) => setFields((p) => p.filter((_, idx) => idx !== i));
+  const removeField = (i: number) =>
+    setFields((p) => p.filter((_, idx) => idx !== i));
 
   const validateClient = (): boolean => {
     const e: Errors = { fieldErrors: {} };
 
-    if (title.trim().length < 3) e.title = "Title must be at least 3 characters.";
+    if (title.trim().length < 3)
+      e.title = "Title must be at least 3 characters.";
     if (description.trim().length < 10)
       e.description = "Description must be at least 10 characters.";
     if (!image) e.image = "Cover image is required.";
@@ -85,7 +92,10 @@ const EventCreatorForm = ({ token }: { token: string }) => {
       const fe: Partial<Record<keyof Field, string>> = {};
       if (!f.label.trim()) fe.label = "Label is required.";
       if (!f.name) fe.name = "Key could not be generated. Change label.";
-      if (f.type === "select" && (!f.options || f.options.filter(Boolean).length === 0)) {
+      if (
+        f.type === "select" &&
+        (!f.options || f.options.filter(Boolean).length === 0)
+      ) {
         fe.options = "Select fields must have at least one option.";
       }
       if (Object.keys(fe).length) (e.fieldErrors as any)[i] = fe;
@@ -99,7 +109,8 @@ const EventCreatorForm = ({ token }: { token: string }) => {
 
     if (deadline) {
       const iso = new Date(deadline).toISOString();
-      if (Number.isNaN(new Date(iso).getTime())) e.deadline = "Invalid deadline format.";
+      if (Number.isNaN(new Date(iso).getTime()))
+        e.deadline = "Invalid deadline format.";
     }
 
     setErrors(e);
@@ -140,7 +151,10 @@ const EventCreatorForm = ({ token }: { token: string }) => {
       setFields([]);
       setErrors({});
     } catch (err: any) {
-      setServerError(err?.message || "Server rejected the request. Check fields & try again.");
+      setServerError(
+        err?.message ||
+          "Server rejected the request. Check fields & try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -148,12 +162,16 @@ const EventCreatorForm = ({ token }: { token: string }) => {
 
   return (
     <div className="relative w-full max-w-4xl mx-auto rounded-3xl p-6 md:p-10 bg-black/60 backdrop-blur-xl border border-green-500/30 shadow-[0_0_60px_rgba(34,197,94,0.35)]">
-      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">Create New Event</h2>
+      <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
+        Create New Event
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Event Details */}
         <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-          <h3 className="text-lg font-semibold text-white mb-4">Event Details</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Event Details
+          </h3>
 
           <input
             className={`${inputBase} px-4 py-3 ${errors.title ? "border-red-500" : ""}`}
@@ -161,7 +179,9 @@ const EventCreatorForm = ({ token }: { token: string }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
+          {errors.title && (
+            <p className="text-xs text-red-400 mt-1">{errors.title}</p>
+          )}
 
           <textarea
             className={`${inputBase} px-4 py-3 mt-4 min-h-[110px] ${
@@ -171,7 +191,9 @@ const EventCreatorForm = ({ token }: { token: string }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          {errors.description && <p className="text-xs text-red-400 mt-1">{errors.description}</p>}
+          {errors.description && (
+            <p className="text-xs text-red-400 mt-1">{errors.description}</p>
+          )}
 
           <input
             type="datetime-local"
@@ -179,7 +201,9 @@ const EventCreatorForm = ({ token }: { token: string }) => {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
           />
-          {errors.deadline && <p className="text-xs text-red-400 mt-1">{errors.deadline}</p>}
+          {errors.deadline && (
+            <p className="text-xs text-red-400 mt-1">{errors.deadline}</p>
+          )}
         </section>
 
         {/* Image */}
@@ -191,23 +215,36 @@ const EventCreatorForm = ({ token }: { token: string }) => {
             className={`w-full text-gray-300 ${errors.image ? "text-red-400" : ""}`}
             onChange={(e) => setImage(e.target.files?.[0] || null)}
           />
-          {errors.image && <p className="text-xs text-red-400 mt-1">{errors.image}</p>}
+          {errors.image && (
+            <p className="text-xs text-red-400 mt-1">{errors.image}</p>
+          )}
         </section>
 
         {/* Fields */}
         <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Registration Fields</h3>
-            <button type="button" onClick={addField} className="px-4 py-2 rounded-full bg-green-500 text-black text-sm font-semibold">
+            <h3 className="text-lg font-semibold text-white">
+              Registration Fields
+            </h3>
+            <button
+              type="button"
+              onClick={addField}
+              className="px-4 py-2 rounded-full bg-green-500 text-black text-sm font-semibold"
+            >
               + Add Field
             </button>
           </div>
 
-          {errors.fields && <p className="text-xs text-red-400 mb-2">{errors.fields}</p>}
+          {errors.fields && (
+            <p className="text-xs text-red-400 mb-2">{errors.fields}</p>
+          )}
 
           <div className="space-y-4">
             {fields.map((f, i) => (
-              <div key={i} className="rounded-xl border border-white/10 bg-black/40 p-4">
+              <div
+                key={i}
+                className="rounded-xl border border-white/10 bg-black/40 p-4"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                   <div>
                     <input
@@ -217,10 +254,15 @@ const EventCreatorForm = ({ token }: { token: string }) => {
                       onChange={(e) => updateField(i, "label", e.target.value)}
                     />
                     {errors.fieldErrors?.[i]?.label && (
-                      <p className="text-xs text-red-400 mt-1">{errors.fieldErrors[i]!.label}</p>
+                      <p className="text-xs text-red-400 mt-1">
+                        {errors.fieldErrors[i]!.label}
+                      </p>
                     )}
                     <p className="text-xs text-gray-500 mt-1">
-                      Key: <span className="text-green-400">{f.name || "auto-generated"}</span>
+                      Key:{" "}
+                      <span className="text-green-400">
+                        {f.name || "auto-generated"}
+                      </span>
                     </p>
                   </div>
 
@@ -239,7 +281,9 @@ const EventCreatorForm = ({ token }: { token: string }) => {
                     <input
                       type="checkbox"
                       checked={f.required}
-                      onChange={(e) => updateField(i, "required", e.target.checked)}
+                      onChange={(e) =>
+                        updateField(i, "required", e.target.checked)
+                      }
                     />
                     Required
                   </label>
@@ -260,7 +304,7 @@ const EventCreatorForm = ({ token }: { token: string }) => {
                           e.target.value
                             .split(",")
                             .map((s) => s.trim())
-                            .filter(Boolean)
+                            .filter(Boolean),
                         )
                       }
                     />

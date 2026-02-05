@@ -15,6 +15,7 @@ import AdminPage from "./pages/adminhain";
 import Navbar from "./components/Navbar";
 import Realadmin from "./pages/admin";
 import ContactUs from "./pages/contact.";
+import ApplicationPage from "./pages/ApplicationPage";
 
 const App = () => {
   return (
@@ -26,8 +27,7 @@ const App = () => {
         <Route path="/team" element={<Team />} />
         <Route path="/events" element={<Events />} />
         <Route path="/resources" element={<Resources />} />
-        <Route path="/join" element={<JoinGFG />} />
-        <Route path="/admin/signup" element={<AdminSignup />} />
+        <Route path="/join" element={<ApplicationPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/admin/login" element={<AdminLogin />} />

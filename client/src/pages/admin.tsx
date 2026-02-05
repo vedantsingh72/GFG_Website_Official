@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import EventCreatorForm from "../components/eventcreaterform"; 
+import EventCreatorForm from "../components/eventcreaterform";
 import {
   getAllEvents,
   deleteEvent,
   getEventResponses,
-} from "../services/event"; 
+} from "../services/event.service";
 import { useAuth } from "../auth/authContext";
 
 interface Event {
@@ -18,11 +18,13 @@ interface Event {
 }
 
 const Admin = () => {
-  const { token } = useAuth(); 
+  const { token } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
-  const [selectedResponses, setSelectedResponses] = useState<any[] | null>(null);
+  const [selectedResponses, setSelectedResponses] = useState<any[] | null>(
+    null,
+  );
 
   const fetchEvents = async () => {
     if (!token) return;

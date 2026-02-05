@@ -1,165 +1,131 @@
-import { useState } from "react";
-import { login } from "../auth/auth";
-import { useAuth } from "../auth/authContext";
-import { useNavigate } from "react-router-dom";
-import GoogleButton from "../components/googleButton";
-
-interface LoginFormProps {
-  setMode?: (mode: "login" | "signup") => void;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ setMode }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [remember, setRemember] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const { loginUser } = useAuth();
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { login, googleLogin } from "../services/auth.service";
+import { Mail, Lock, ArrowRight } from "lucide-react";
+import { useAuth } from "@/auth/authContext";
+const LoginForm = () => {
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
-    setError(null);
-    setLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
     try {
-      const res = await login(email, password);
-      if (res.accessToken && res.user) {
-        loginUser(res.accessToken, res.user);
+      const res = await login(formData.email, formData.password);
+      if (res.success) {
+        loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
         navigate("/home");
       }
     } catch (err: any) {
-      setError(err?.message || "Login failed");
+      setError(err.response?.data?.message || "Invalid email or password");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    try {
+      if (!credentialResponse?.credential) {
+        setError("Google credential missing");
+        return;
+      }
+
+      const res = await googleLogin(credentialResponse.credential);
+      if (res.success) {
+        loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
+        navigate("/home");
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Google login failed");
     }
   };
 
   return (
-    <div className="relative w-full rounded-[28px] p-6 md:p-8">
-      {/* Outer aura */}
-      <div className="absolute inset-[-20px] rounded-[40px] blur-[120px] bg-emerald-500/25 -z-10" />
-
-      {/* Card */}
-      <div
-        className="
-          relative rounded-[28px] p-8
-          bg-black/60 backdrop-blur-xl
-          border border-emerald-500/40
-          shadow-[0_0_60px_rgba(16,185,129,0.35), inset_0_0_25px_rgba(16,185,129,0.2)]
-        "
-      >
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-[#0e0e0e] border border-white/10 rounded-2xl p-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-white text-3xl font-bold tracking-wide mb-1">
-            Welcome Back
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-semibold text-white">
+            Sign in to your account
           </h1>
-          <p className="text-gray-400 text-sm">
-            Login to GFG RGIPT Student Chapter
-          </p>
+          <p className="text-sm text-gray-500 mt-1">Welcome back</p>
         </div>
 
-        {/* Email */}
-        <div className="mb-5">
-          <input
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="
-              w-full px-5 py-3.5 rounded-full
-              bg-black/70 border border-emerald-500/50
-              text-white placeholder-gray-500
-              focus:outline-none focus:border-emerald-400
-              focus:shadow-[0_0_25px_rgba(16,185,129,0.7)]
-              transition-all
-            "
-          />
-        </div>
-
-        {/* Password */}
-        <div className="mb-4 relative">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="
-              w-full px-5 py-3.5 rounded-full pr-12
-              bg-black/70 border border-emerald-500/50
-              text-white placeholder-gray-500
-              focus:outline-none focus:border-emerald-400
-              focus:shadow-[0_0_25px_rgba(16,185,129,0.7)]
-              transition-all
-            "
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-400 hover:text-emerald-300 transition"
-          >
-            {showPassword ? "🙈" : "👁️"}
-          </button>
-        </div>
-
-        {/* Remember + Forgot */}
-        <div className="flex items-center justify-between text-sm text-gray-400 mb-5 px-1">
-          <label className="flex items-center gap-2 cursor-pointer">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
             <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-              className="w-4 h-4 accent-emerald-500"
+              type="email"
+              placeholder="Email address"
+              required
+              className="w-full bg-black border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:border-green-500 outline-none"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
-            Remember me
-          </label>
-          <button className="text-emerald-400 hover:text-emerald-300 hover:underline">
-            Forgot password?
+          </div>
+
+          {/* Password */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-4 h-4" />
+            <input
+              type="password"
+              placeholder="Password"
+              required
+              className="w-full bg-black border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:border-green-500 outline-none"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-xs text-center">{error}</p>}
+
+          {/* Submit */}
+          <button
+            disabled={isLoading}
+            className="w-full mt-4 bg-green-600 hover:bg-green-500 text-black font-medium py-2.5 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
+          >
+            {isLoading ? "Signing in..." : "Sign in"}
+            {!isLoading && <ArrowRight className="w-4 h-4" />}
           </button>
-        </div>
+        </form>
 
-        {/* Error */}
-        {error && (
-          <p className="mb-4 text-center text-sm text-red-400">{error}</p>
-        )}
-
-        {/* Login button */}
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="
-            w-full py-3.5 rounded-full
-            bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400
-            text-black font-semibold text-lg
-            shadow-[0_0_40px_rgba(16,185,129,0.8)]
-            hover:shadow-[0_0_70px_rgba(16,185,129,1)]
-            hover:scale-[1.03] active:scale-[0.98]
-            transition-all duration-200
-            disabled:opacity-60 disabled:cursor-not-allowed
-          "
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {/* OR */}
-        <div className="flex items-center my-6">
-          <div className="flex-1 h-px bg-emerald-500/30" />
-          <span className="px-5 text-xs text-gray-400">OR</span>
-          <div className="flex-1 h-px bg-emerald-500/30" />
+        {/* Divider */}
+        <div className="flex items-center gap-3 my-6">
+          <div className="flex-1 h-px bg-white/10" />
+          <span className="text-xs text-gray-500">OR</span>
+          <div className="flex-1 h-px bg-white/10" />
         </div>
 
         {/* Google */}
-        <GoogleButton />
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError("Google login failed")}
+            theme="filled_black"
+            shape="pill"
+            text="signin_with"
+          />
+        </div>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-sm text-gray-400">
-          Don’t have an account?{" "}
-          <button
-            onClick={() => setMode?.("signup")}
-            className="text-emerald-400 hover:text-emerald-300 hover:underline"
-          >
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Don&apos;t have an account?{" "}
+          <Link to="/signup" className="text-green-500 hover:underline">
             Create one
-          </button>
+          </Link>
         </p>
       </div>
     </div>
