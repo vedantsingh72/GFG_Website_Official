@@ -34,7 +34,7 @@ const cardsData = [
   {
     title: "Upcoming Events",
     description: "Stay ahead with our latest workshops and hackathons.",
-    link: "/upcomingEvents",
+    link: "/events",
   },
   {
     title: "Resources",
@@ -44,7 +44,7 @@ const cardsData = [
   {
     title: "Our Teams",
     description: "Meet the minds behind the RGIPT Student Chapter.",
-    link: "/teams",
+    link: "/team",
   },
 ];
 
