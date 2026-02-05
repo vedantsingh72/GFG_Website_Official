@@ -15,6 +15,7 @@ import AdminPage from "./pages/adminhain";
 import Navbar from "./components/Navbar";
 import Realadmin from "./pages/admin";
 import ContactUs from "./pages/contact.";
+import Realjoin from "./pages/realjoin";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/realadmin" element={<Realadmin />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/realjoin" element={<Realjoin />} />
 
         <Route path="/home" element={<Home />} />
       </Routes>

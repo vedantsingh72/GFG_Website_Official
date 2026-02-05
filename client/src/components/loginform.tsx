@@ -15,6 +15,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setMode }) => {
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const { loginUser } = useAuth();
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ setMode }) => {
     setLoading(true);
     try {
       const res = await login(email, password);
-      if (res.accessToken && res.user) {
+      if (res?.accessToken && res?.user) {
         loginUser(res.accessToken, res.user);
-        navigate("/home");
+        setLoggedIn(true); // show Join Now button
       }
     } catch (err: any) {
       setError(err?.message || "Login failed");
@@ -123,23 +124,47 @@ const LoginForm: React.FC<LoginFormProps> = ({ setMode }) => {
           <p className="mb-4 text-center text-sm text-red-400">{error}</p>
         )}
 
-        {/* Login button */}
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          className="
-            w-full py-3.5 rounded-full
-            bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400
-            text-black font-semibold text-lg
-            shadow-[0_0_40px_rgba(16,185,129,0.8)]
-            hover:shadow-[0_0_70px_rgba(16,185,129,1)]
-            hover:scale-[1.03] active:scale-[0.98]
-            transition-all duration-200
-            disabled:opacity-60 disabled:cursor-not-allowed
-          "
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
+        {/* Success */}
+        {loggedIn && (
+          <p className="mb-4 text-center text-emerald-400 font-medium">
+            ✅ Login successful! You’re ready to join the chapter.
+          </p>
+        )}
+
+        {/* Login / Join Now */}
+        {!loggedIn ? (
+          <button
+            onClick={handleLogin}
+            disabled={loading}
+            className="
+              w-full py-3.5 rounded-full
+              bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400
+              text-black font-semibold text-lg
+              shadow-[0_0_40px_rgba(16,185,129,0.8)]
+              hover:shadow-[0_0_70px_rgba(16,185,129,1)]
+              hover:scale-[1.03] active:scale-[0.98]
+              transition-all duration-200
+              disabled:opacity-60 disabled:cursor-not-allowed
+            "
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/realjoin")}
+            className="
+              w-full py-3.5 rounded-full
+              bg-gradient-to-r from-pink-500 via-red-500 to-rose-500
+              text-white font-bold text-lg
+              shadow-[0_0_50px_rgba(244,63,94,0.9)]
+              hover:shadow-[0_0_80px_rgba(244,63,94,1)]
+              hover:scale-[1.05] active:scale-[0.98]
+              transition-all duration-300
+            "
+          >
+            🚀 Join Now
+          </button>
+        )}
 
         {/* OR */}
         <div className="flex items-center my-6">
