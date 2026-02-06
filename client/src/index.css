@@ -125,10 +125,49 @@
 
 
 @keyframes loop-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-loop-scroll {
   animation: loop-scroll 25s linear infinite;
+  will-change: transform;
+}
+
+
+/* Target the calendar icon for Chrome, Safari, and Edge */
+/* Targets the calendar icon in Chrome, Edge, and Safari */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Turns black to white */
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.animate-loop-scroll {
+  /* This ensures the GPU handles the movement, preventing sub-pixel jitters */
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform;
+}
+
+.marquee-track {
+  width: max-content;
+  animation: marquee-scroll 18s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  from {
+    left: 0;
+  }
+  to {
+    left: -50%;
+  }
 }

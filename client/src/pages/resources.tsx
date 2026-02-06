@@ -105,7 +105,7 @@ const Resources = () => {
   const [activeBranch, setActiveBranch] = useState<Branch | null>(null);
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-24">
+    <div className="min-h-screen  text-white px-6 py-24">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-5xl font-black text-center mb-12">
           Academic <span className="text-green-400">Resources</span>

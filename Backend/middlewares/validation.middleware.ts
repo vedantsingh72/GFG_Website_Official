@@ -41,7 +41,7 @@ export const signupSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    body: z.object({
+  body: z.object({
     email: z.string().email(),
     password: z.string().min(1, "Password required"),
   }),
@@ -96,25 +96,28 @@ export const applicationSchema = z.object({
 
 const status = ["pending", "accepted", "rejected"];
 
-const fieldTypes = ["text", "email", "number", "select", "checkbox", "textarea", "date"];
+const fieldTypes = [
+  "text",
+  "email",
+  "number",
+  "select",
+  "checkbox",
+  "textarea",
+  "date",
+];
 
 export const updateApplicationSchema = z.object({
   body: z.object({
     userId: z.string(),
     newStatus: z.enum(status),
   }),
-
 });
-
 
 export const adminLoginSchema = z.object({
   body: z.object({
     email: z
       .string()
-      .regex(
-        /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
-        "Invalid admin email"
-      ),
+      .regex(/^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/, "Invalid admin email"),
 
     password: z.string().min(1, "Password required"),
 
@@ -122,20 +125,15 @@ export const adminLoginSchema = z.object({
   }),
 });
 
-
-
-
-
-
-
-
-
 export const adminSignupSchema = z.object({
   body: z.object({
     name: z.string().min(2).max(50),
     email: z
       .string()
-      .regex(/^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/, "Email must be of form 24cs3063@rgipt.ac.in"),
+      .regex(
+        /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
+        "Email must be of form 24cs3063@rgipt.ac.in",
+      ),
     password: z
       .string()
       .min(6, "Minimum 6 characters")
@@ -146,17 +144,13 @@ export const adminSignupSchema = z.object({
   }),
 });
 
-
 export const createEventSchema = z.object({
   body: z.object({
     title: z.string().min(3, "Title is required"),
 
     description: z.string().min(10, "Description is required"),
 
-    deadline: z
-      .string()
-      .datetime()
-      .optional(),
+    deadline: z.string().or(z.date()),
 
     fields: z
       .array(
@@ -166,12 +160,11 @@ export const createEventSchema = z.object({
           type: z.enum(fieldTypes),
           required: z.boolean().optional(),
           options: z.array(z.string()).optional(),
-        })
+        }),
       )
       .min(1, "At least one field is required"),
   }),
 });
-
 
 export const updateEventSchema = z.object({
   params: z.object({
@@ -183,12 +176,11 @@ export const updateEventSchema = z.object({
 
     description: z.string().min(10).optional(),
 
-    deadline: z
-      .string()
-      .datetime()
-      .optional(),
+    deadline: z.string().datetime().optional(),
 
-    isActive: z.boolean().optional(),
+    isActive: z
+      .preprocess((val) => val === "true" || val === true, z.boolean())
+      .optional(),
 
     fields: z
       .array(
@@ -198,12 +190,11 @@ export const updateEventSchema = z.object({
           type: z.enum(fieldTypes),
           required: z.boolean().optional(),
           options: z.array(z.string()).optional(),
-        })
+        }),
       )
       .optional(),
   }),
 });
-
 
 export const registerEventSchema = z.object({
   body: z.object({

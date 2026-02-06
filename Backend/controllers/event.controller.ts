@@ -29,14 +29,21 @@ export const createEventHandler = async (
       { folder: "events" },
     );
 
+    let fields = req.body.fields;
+
+    if (typeof fields === "string") {
+      fields = JSON.parse(fields);
+    }
+
     const event = await EventModel.create({
       title: req.body.title,
       description: req.body.description,
+      deadline: req.body.deadline ? new Date(req.body.deadline) : null,
       image: {
         url: uploadResult.secure_url,
         publicId: uploadResult.public_id,
       },
-      fields: JSON.parse(req.body.fields),
+      fields: fields,
       createdBy: req.userId,
     });
 
@@ -56,6 +63,13 @@ export const registerEventHandler = async (
     const { id } = req.params;
     const eventId = id;
     let { responses } = req.body;
+
+    if (req.role === "ADMIN") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied",
+      });
+    }
 
     if (typeof responses === "string") {
       try {
@@ -148,12 +162,6 @@ export const getAllEvent = async (
   next: NextFunction,
 ) => {
   try {
-    if (req.role !== "ADMIN") {
-      return res.status(403).json({
-        success: false,
-        message: "Access denied",
-      });
-    }
 
     const events = await EventModel.find();
 
@@ -314,26 +322,51 @@ export const getAllResponse = async (
     next(err);
   }
 };
-export const getEventbyId = async (
+export const getEventbyId = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const event = await EventModel.findById(id); 
+
+    if(!event){
+        return res.status(404).json({
+            success: false,
+            message: "Event does not exist"
+        });
+    }
+    res.status(200).json({
+      success: true,
+      event,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+export const getMyRegistration = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
+    const userId = req.userId;
+    const { id } = req.params; 
 
-    const { id } = req.params;
-    const event = EventModel.findById(id);
-
-    if(!event){
-        return res.status(404).json({
-            success:false,
-            message:"Event doest not Exist"
-        });
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized access",
+      });
     }
+
+    const registration = await EventRegistrationModel.findOne({
+      event: id,
+      user: userId,
+    }).lean(); 
 
     res.status(200).json({
       success: true,
-      event,
+      registration: registration || null,
     });
   } catch (err) {
     next(err);

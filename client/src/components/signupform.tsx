@@ -75,7 +75,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+    <div className="min-h-screen  flex items-center justify-center px-4">
       <div className={`w-full max-w-md bg-[#0e0e0e] border ${isAdmin ? 'border-green-500/30 shadow-[0_0_20px_rgba(34,197,94,0.1)]' : 'border-white/10'} rounded-2xl p-8 transition-all duration-300`}>
         
         {/* Header */}

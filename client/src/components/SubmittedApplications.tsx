@@ -181,7 +181,7 @@ const SubmittedApplication = ({ application }: { application: Application }) => 
             <div className="flex items-center gap-2 text-gray-500">
               <Users className="w-4 h-4" />
               <span className="text-xs font-semibold uppercase tracking-wider">
-                Other Clubs
+                Other Clubs / Socities
               </span>
             </div>
             <div className="flex flex-wrap gap-2">

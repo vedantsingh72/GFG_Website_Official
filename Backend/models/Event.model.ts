@@ -24,7 +24,7 @@ const eventSchema = new mongoose.Schema(
         name: { type: String, required: true },
         type: {
           type: String,
-          enum: ["text", "select", "textarea", "checkbox"],
+          enum: ["text", "email", "number", "select", "checkbox", "textarea", "date"],
           required: true,
         },
         required: { type: Boolean, default: false },

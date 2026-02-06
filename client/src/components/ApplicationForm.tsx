@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { applyApplication } from "../services/application.service";
+import { useState, useEffect } from "react";
+import { applyApplication, getAllApplications, getFilledApplication } from "../services/application.service";
 import type {
   ApplyApplicationPayload,
   Application,
 } from "../types/application.types";
 import { TEAMS } from "../constants/application.constant";
+import { useAuth } from "../auth/authContext";
 import {
   Phone,
   Award,
@@ -16,13 +17,17 @@ import {
   Plus,
   X,
 } from "lucide-react";
+import { Toaster, toast } from "react-hot-toast";
 
 const ApplicationForm = ({
   onSubmitted,
 }: {
   onSubmitted: (app: Application) => void;
 }) => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [application, setApplication] = useState<Application | null>(null);
+  const [allApplications, setAllApplications] = useState<Application[]>([]);
 
   const [form, setForm] = useState<ApplyApplicationPayload>({
     rollNo: "",
@@ -38,7 +43,6 @@ const ApplicationForm = ({
   const [skillInput, setSkillInput] = useState("");
   const [clubInput, setClubInput] = useState("");
 
-  /* ---------- handlers ---------- */
 
   const addSkill = () => {
     if (!skillInput.trim()) return;
@@ -69,20 +73,42 @@ const ApplicationForm = ({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await applyApplication(form);
-      onSubmitted(res.application);
-    } catch (err) {
-      console.error("Application failed", err);
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const res: any = await applyApplication(form);
+    
+    if (res.form) {
+      onSubmitted(res.form); 
     }
-  };
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || "Submission failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user?.role === "ADMIN") {
+          const res = await getAllApplications();
+          setAllApplications(res.forms || []);
+        } else {
+          const res = await getFilledApplication();
+          setApplication(res.application);
+        }
+      } catch (err) {
+        setApplication(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [user]);
 
   return (
-    <div className="max-w-2xl mt-25 mx-auto bg-[#0e0e0e] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+    <div className="max-w-2xl mt-25 mx-auto  border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
       {/* Header */}
       <div className="bg-gradient-to-r from-green-900/20 to-transparent p-8 border-b border-white/5">
         <h1 className="text-3xl font-bold text-white flex items-center gap-3">
@@ -166,7 +192,7 @@ const ApplicationForm = ({
         </Section>
 
         {/* Other Clubs */}
-        <Section label="Other Clubs" icon={Users}>
+        <Section label="Other Clubs / Socities" icon={Users}>
           <AddInput
             value={clubInput}
             onChange={setClubInput}
@@ -215,7 +241,7 @@ const ApplicationForm = ({
 
 export default ApplicationForm;
 
-/* ---------- Reusable UI ---------- */
+
 
 const Section = ({ label, icon: Icon, children }: any) => (
   <div className="space-y-3">

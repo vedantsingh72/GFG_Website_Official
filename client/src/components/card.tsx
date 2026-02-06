@@ -5,9 +5,10 @@ interface CardProps {
   title: string;
   description: string;
   link: string;
+  number:number;
 }
 
-const Card = ({ title, description, link }: CardProps) => {
+const Card = ({ title, description, link , number }: CardProps) => {
   return (
     <Link 
       to={link}
@@ -26,7 +27,7 @@ const Card = ({ title, description, link }: CardProps) => {
           
           {/* Decorative Numbering */}
           <span className="text-white/5 font-mono text-4xl group-hover/card:text-green-500/10 transition-colors">
-            0{Math.floor(Math.random() * 9) + 1}
+            0{number}
           </span>
         </div>
 

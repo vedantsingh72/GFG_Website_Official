@@ -1,118 +1,49 @@
-const API_URL = "http://localhost:3000/api/event";
+import api from "../lib/api";
+import { AllEventsResponse, EventResponse, RegistrationResponse, EventRegistration } from "../types/event.types";
 
-
-// Admin: Create Event
-export const createEvent = async (formData: FormData, token: string) => {
-  const response = await fetch(`${API_URL}/create`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) throw new Error("Failed to create event");
-  return response.json();
+export const getAllEvents = async (): Promise<AllEventsResponse> => {
+  const res = await api.get<AllEventsResponse>("/event/all");
+  return res.data;
 };
 
-// Admin: Get All Events (active + inactive)
-export const getAllEvents = async (token: string) => {
-  const response = await fetch(`${API_URL}/all`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) throw new Error("Failed to fetch events");
-  return response.json();
+export const getActiveEvents = async (): Promise<AllEventsResponse> => {
+  const res = await api.get<AllEventsResponse>("/event/active");
+  return res.data;
 };
 
-// Public/Admin: Get only Active Events
-export const getAllActiveEvents = async (token: string) => {
-  const response = await fetch(`${API_URL}/active`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) throw new Error("Failed to fetch active events");
-  return response.json();
+export const getEventById = async (id: string): Promise<EventResponse> => {
+  const res = await api.get<EventResponse>(`/event/${id}`);
+  return res.data;
 };
 
-// Get single Event by ID
-export const getEventById = async (eventId: string, token: string) => {
-  const response = await fetch(`${API_URL}/${eventId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const createEvent = async (formData: FormData): Promise<EventResponse> => {
+  const res = await api.post<EventResponse>("/event/create", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
-
-  if (!response.ok) throw new Error("Failed to fetch event");
-  return response.json();
+  return res.data;
 };
 
-// Admin: Update Event
-export const updateEvent = async (
-  eventId: string,
-  formData: FormData,
-  token: string
-) => {
-  const response = await fetch(`${API_URL}/update/${eventId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    body: formData,
-  });
-
-  if (!response.ok) throw new Error("Failed to update event");
-  return response.json();
+export const registerForEvent = async (id: string, responses: Record<string, any>): Promise<RegistrationResponse> => {
+  const res = await api.post<RegistrationResponse>(`/event/register/${id}`, { responses });
+  return res.data;
 };
 
-// Admin: Delete Event
-export const deleteEvent = async (eventId: string, token: string) => {
-  const response = await fetch(`${API_URL}/delete/${eventId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) throw new Error("Failed to delete event");
-  return response.json();
+export const deleteEvent = async (id: string) => {
+  const res = await api.delete(`/event/delete/${id}`);
+  return res.data;
 };
 
-// Admin: Get all responses for an Event
-export const getEventResponses = async (eventId: string, token: string) => {
-  const response = await fetch(`${API_URL}/responses/${eventId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) throw new Error("Failed to fetch responses");
-  return response.json();
+export const getEventResponses = async (id: string): Promise<{ success: boolean; responses: EventRegistration[] }> => {
+  const res = await api.get(`/event/responses/${id}`);
+  return res.data;
 };
 
-// User: Register for Event
-export const registerForEvent = async (
-  eventId: string,
-  payload: Record<string, any>,
-  token: string
-) => {
-  const response = await fetch(`${API_URL}/register/${eventId}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(payload),
-  });
+export const getMyRegistration = async (eventId: string): Promise<{ success: boolean; registration: any }> => {
+  const res = await api.get(`/event/my-registration/${eventId}`);
+  return res.data;
+};
 
-  if (!response.ok) throw new Error("Failed to register for event");
-  return response.json();
+export const updateEvent = async (id: string, formData: FormData): Promise<EventResponse> => {
+  const res = await api.put<EventResponse>(`/event/update/${id}`, formData);
+  return res.data;
 };

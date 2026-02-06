@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Card from "../components/card";
+import DynamicGallery from "@/components/DynamicGallery";
 import Contact from "../components/contact";
 import { FiArrowRight, FiCode, FiUsers, FiCalendar } from "react-icons/fi";
 import {
@@ -15,6 +15,7 @@ import {
   SiNodedotjs,
   SiPrisma,
 } from "react-icons/si";
+import CountUp from "@/components/CountUp";
 import GlowBlob from "@/components/GlowBlob";
 
 const icons = [
@@ -32,25 +33,28 @@ const icons = [
 
 const cardsData = [
   {
-    title: "Upcoming Events",
-    description: "Stay ahead with our latest workshops and hackathons.",
-    link: "/upcomingEvents",
+    title: "Events",
+    description: "Stay ahead with our latest workshops and Events",
+    link: "/events",
+    number: 1,
   },
   {
     title: "Resources",
-    description: "Curated roadmaps for DSA, Web Dev, and Interview prep.",
+    description: "Get access to study material with DSA and webDEv Roadmaps",
     link: "/resources",
+    number: 2,
   },
   {
     title: "Our Teams",
     description: "Meet the minds behind the RGIPT Student Chapter.",
     link: "/teams",
+    number: 3,
   },
 ];
 
 const Home = () => {
   return (
-    <div className="relative min-h-screen bg-black text-white selection:bg-green-500/30 font-sans overflow-x-hidden">
+    <div className="relative min-h-screen text-white font-sans overflow-x-hidden">
       <main className="relative">
         <section className=" top-0 relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
           <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
@@ -93,25 +97,31 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="relative py-24 bg-[#050505] overflow-hidden">
-          <div className="relative mb-16 flex overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-            <div className="flex animate-loop-scroll items-center gap-16 py-4 w-max">
-              {icons.map((icon, i) => (
-                <div
-                  key={`set1-${i}`}
-                  className="text-gray-600 text-4xl hover:text-green-500 transition-colors flex-shrink-0"
-                >
-                  {icon}
-                </div>
-              ))}
-              {icons.map((icon, i) => (
-                <div
-                  key={`set2-${i}`}
-                  className="text-gray-600 text-4xl hover:text-green-500 transition-colors flex-shrink-0"
-                >
-                  {icon}
-                </div>
-              ))}
+        <section className="relative py-24overflow-hidden">
+          <div className="w-screen overflow-hidden m-4">
+            <div className="relative w-screen h-20 overflow-hidden">
+              <div className="absolute left-0 top-0 h-full flex items-center gap-10 marquee-track">
+                {icons.map((icon, i) => (
+                  <div
+                    key={`set1-${i}`}
+                    className="flex justify-center items-center w-24 text-4xl
+                         text-gray-600 hover:text-green-500 transition-colors"
+                  >
+                    {icon}
+                  </div>
+                ))}
+
+                {/* Duplicate set */}
+                {icons.map((icon, i) => (
+                  <div
+                    key={`set2-${i}`}
+                    className="flex justify-center items-center w-24 text-4xl
+                         text-gray-600 hover:text-green-500 transition-colors"
+                  >
+                    {icon}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -121,11 +131,22 @@ const Home = () => {
               {[
                 {
                   icon: <FiCode />,
-                  val: "50k+",
+                  to: 50,
+                  suffix: "k+",
                   label: "Lines of Code Pushed",
                 },
-                { icon: <FiUsers />, val: "500+", label: "Active Geeks" },
-                { icon: <FiCalendar />, val: "25+", label: "Events Per Year" },
+                {
+                  icon: <FiUsers />,
+                  to: 500,
+                  suffix: "+",
+                  label: "Active Geeks",
+                },
+                {
+                  icon: <FiCalendar />,
+                  to: 25,
+                  suffix: "+",
+                  label: "Events Per Year",
+                },
               ].map((stat, idx) => (
                 <div
                   key={idx}
@@ -134,9 +155,19 @@ const Home = () => {
                   <div className="text-green-500 text-3xl mb-4">
                     {stat.icon}
                   </div>
-                  <h4 className="text-5xl font-bold text-white mb-2">
-                    {stat.val}
+
+                  <h4 className="text-5xl font-bold text-white mb-2 flex items-baseline">
+                    <CountUp
+                      to={stat.to}
+                      from={0}
+                      separator=","
+                      duration={2}
+                      startWhen={true} // This combined with useInView inside will trigger on scroll
+                      className="count-up-text"
+                    />
+                    <span className="text-green-500 ml-1">{stat.suffix}</span>
                   </h4>
+
                   <p className="text-gray-500 text-xs font-bold uppercase tracking-widest">
                     {stat.label}
                   </p>
@@ -146,24 +177,30 @@ const Home = () => {
           </div>
 
           {/* Bottom Sliding Bar (Reverse via CSS style or negative keyframe) */}
-          <div className="relative mt-16 flex overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
-            <div className="flex animate-loop-scroll items-center gap-16 py-4 min-w-max [animation-direction:reverse]">
-              {icons.map((icon, i) => (
-                <div
-                  key={`bot-1-${i}`}
-                  className="flex-shrink-0 text-gray-600 text-4xl hover:text-green-500 transition-colors"
-                >
-                  {icon}
-                </div>
-              ))}
-              {icons.map((icon, i) => (
-                <div
-                  key={`bot-2-${i}`}
-                  className="flex-shrink-0 text-gray-600 text-4xl hover:text-green-500 transition-colors"
-                >
-                  {icon}
-                </div>
-              ))}
+          <div className="w-screen m-4 overflow-hidden">
+            <div className="relative w-screen h-20 overflow-hidden">
+              <div className="absolute left-0 top-0 h-full flex items-center gap-10 marquee-track">
+                {icons.map((icon, i) => (
+                  <div
+                    key={`set1-${i}`}
+                    className="flex justify-center items-center w-24 text-4xl
+                         text-gray-600 hover:text-green-500 transition-colors"
+                  >
+                    {icon}
+                  </div>
+                ))}
+
+                {/* Duplicate set */}
+                {icons.map((icon, i) => (
+                  <div
+                    key={`set2-${i}`}
+                    className="flex justify-center items-center w-24 text-4xl
+                         text-gray-600 hover:text-green-500 transition-colors"
+                  >
+                    {icon}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -244,6 +281,13 @@ const Home = () => {
           </div>
         </section>
 
+        <section className="py-20 max-w-7xl mx-auto px-6">
+          <h2 className="text-xl font-black text-gray-200 uppercase tracking-[0.4em] mb-12">
+            Life at GFG RGIPT
+          </h2>
+          <DynamicGallery />
+        </section>
+
         {/* --- QUICK ACCESS SECTION --- */}
         <section className="max-w-7xl mx-auto px-6 py-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-16">
@@ -277,6 +321,7 @@ const Home = () => {
                   title={card.title}
                   description={card.description}
                   link={card.link}
+                  number={card.number}
                 />
               </div>
             ))}
