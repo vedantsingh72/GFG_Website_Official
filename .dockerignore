@@ -1,7 +1,8 @@
 node_modules
-Backend
 .git
 .gitignore
 .env
 .env.*
 README.md
+dist
+build
