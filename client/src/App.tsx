@@ -3,7 +3,6 @@ import LoginForm from "./pages/login";
 import SignupForm from "./pages/signup";
 import { Navigate } from "react-router-dom";
 import Home from "./pages/home";
-import About from "./pages/about";
 import Team from "./pages/teams";
 import Resources from "./pages/resources";
 import Navbar from "./components/Navbar";
@@ -47,7 +46,6 @@ const App = () => {
         <main className="relative z-10">
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/about" element={<About />} />
             <Route path="/team" element={<Team />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/resources" element={<Resources />} />

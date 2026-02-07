@@ -4,25 +4,25 @@ import { motion } from "framer-motion";
 const images = [
   {
     id: 1,
-    url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b",
+    url: "https://res.cloudinary.com/dxaq078zo/image/upload/v1770462107/IMG_6826_hxbpzz.jpg",
     title: "Web Workshops",
     desc: "Deep dive into React & Next.js",
   },
   {
     id: 2,
-    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
+    url: "https://res.cloudinary.com/dxaq078zo/image/upload/v1770462226/IMG_20250907_173147-Edit_cqs59v.jpg",
     title: "Competitive Programming",
     desc: "Mastering Data Structures",
   },
   {
     id: 3,
-    url: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
+    url: "https://res.cloudinary.com/dxaq078zo/image/upload/v1770461862/IMG_20250907_170009_iec3fi.jpg",
     title: "Open Source",
     desc: "Contributing to the community",
   },
   {
     id: 4,
-    url: "https://images.unsplash.com/photo-1504639725590-34d0984388bd",
+    url: "https://res.cloudinary.com/dxaq078zo/image/upload/v1770462391/IMG_6834_o0ummu.jpg",
     title: "Tech Talks",
     desc: "Insights from industry experts",
   },

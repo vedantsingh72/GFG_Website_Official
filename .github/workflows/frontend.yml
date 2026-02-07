@@ -27,7 +27,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/gfg-website-frontend:prod
           build-args: |
-            VITE_API_URL=${{ secrets.API_URL }}
             VITE_GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             
       - name: Deploy to Development Server
