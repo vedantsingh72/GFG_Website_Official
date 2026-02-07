@@ -49,6 +49,48 @@ export default function TeamMemberList() {
           onGithubClick={() => console.log("GitHub clicked")}
           onLinkedinClick={() => console.log("LinkedIn clicked")}
         />
+        <ProfileCard
+          name="Mayank Maurya"
+          title="Technical Head"
+          handle="javicodes"
+          status="Online"
+          avatarUrl={Kushagra}
+          showUserInfo={true}
+          enableTilt={true}
+          enableMobileTilt={false}
+          githubUrl="https://github.com/javicodes"
+          linkedinUrl="https://linkedin.com/in/javicodes"
+          onGithubClick={() => console.log("GitHub clicked")}
+          onLinkedinClick={() => console.log("LinkedIn clicked")}
+        />
+        <ProfileCard
+          name="Aushutosh Kumar"
+          title="Technical Executive"
+          handle="javicodes"
+          status="Online"
+          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476259/Ashutosh_xjfewc.jpg"
+          showUserInfo={true}
+          enableTilt={true}
+          enableMobileTilt={false}
+          githubUrl="https://github.com/javicodes"
+          linkedinUrl="https://linkedin.com/in/javicodes"
+          onGithubClick={() => console.log("GitHub clicked")}
+          onLinkedinClick={() => console.log("LinkedIn clicked")}
+        />
+        <ProfileCard
+          name="Vedant Singh"
+          title="Technical Executive"
+          handle="javicodes"
+          status="Online"
+          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476203/Vedant_Singh_joun3q.jpg"
+          showUserInfo={true}
+          enableTilt={true}
+          enableMobileTilt={false}
+          githubUrl="https://github.com/javicodes"
+          linkedinUrl="https://linkedin.com/in/javicodes"
+          onGithubClick={() => console.log("GitHub clicked")}
+          onLinkedinClick={() => console.log("LinkedIn clicked")}
+        />
       </div>
     </div>
   );
