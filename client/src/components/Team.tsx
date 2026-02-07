@@ -1,7 +1,4 @@
 import ProfileCard from "./ProfileCard";
-import Ashish from "../assets/Ashish_wbg.png"
-import Kushagra from "../assets/Kushagra_wbg.png"
-import Shreya from "../assets/Shreya_wbg.png"
 
 export default function TeamMemberList() {
   return (
@@ -12,7 +9,7 @@ export default function TeamMemberList() {
           title="Vice President"
           handle="javicodes"
           status="Online"
-          avatarUrl={Ashish}
+          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464336/Ashish_wbg_elow3t.png"
           showUserInfo={true}
           enableTilt={true}
           enableMobileTilt={false}
@@ -26,7 +23,7 @@ export default function TeamMemberList() {
           title="President"
           handle="javicodes"
           status="Online"
-          avatarUrl={Shreya}
+          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464338/Shreya_wbg_v00gmo.png"
           showUserInfo={true}
           enableTilt={true}
           enableMobileTilt={false}
@@ -40,7 +37,7 @@ export default function TeamMemberList() {
           title="Vice President"
           handle="javicodes"
           status="Online"
-          avatarUrl={Kushagra}
+          avatarUrl="https://res.cloudinary.com/dxaq078zo/image/upload/v1770464338/kushagra_wbg_kdge1e.png"
           showUserInfo={true}
           enableTilt={true}
           enableMobileTilt={false}
