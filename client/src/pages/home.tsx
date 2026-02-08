@@ -47,7 +47,7 @@ const cardsData = [
   {
     title: "Our Teams",
     description: "Meet the minds behind the RGIPT Student Chapter.",
-    link: "/teams",
+    link: "/team",
     number: 3,
   },
 ];
