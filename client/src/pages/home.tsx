@@ -88,9 +88,9 @@ const Home = () => {
                   <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
-              <Link to={"/roadmap"}>
+              <Link to={"/resources"}>
                 <button className="px-10 py-4 border border-white/10 text-white font-bold rounded-xl hover:bg-white/5 transition-all">
-                  VIEW ROADMAPS
+                  VIEW RESOURCES
                 </button>
               </Link>
             </div>

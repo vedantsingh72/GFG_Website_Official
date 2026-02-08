@@ -50,7 +50,7 @@ const Launch: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen bg-black text-white overflow-hidden">
+    <div className="relative min-h-screen text-white overflow-hidden">
       {/* Background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(0,255,136,0.15),_transparent_45%)]" />
 
@@ -80,10 +80,10 @@ const Launch: FC = () => {
             {/* Headline like Home Page */}
             <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl">
               <span className="block text-white">
-                LEAVE YOUR
+                INTRODUCING
               </span>
               <span className="block bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(0,255,136,0.8)]">
-                MARK WITH GFG
+                GFG OFFICIAL WEBSITE
               </span>
             </h1>
 
