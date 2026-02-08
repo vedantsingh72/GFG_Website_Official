@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiMail, FiPhone, FiMapPin, FiSend } from "react-icons/fi";
-import { FaLinkedin, FaInstagram, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaInstagram, FaGithub, FaWhatsapp } from "react-icons/fa";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -41,12 +41,12 @@ const Contact = () => {
           <div className="space-y-6 text-gray-300">
             <div className="flex items-center gap-4">
               <FiMail className="text-green-400" />
-              <span>gfg.rgipt@gmail.com</span>
+              <span>geeksforgeeks@rgipt.ac.in</span>
             </div>
 
             <div className="flex items-center gap-4">
               <FiPhone className="text-green-400" />
-              <span>+91 9XXXXXXXXX</span>
+              <span>+91-8299857823</span>
             </div>
 
             <div className="flex items-center gap-4">
@@ -56,14 +56,14 @@ const Contact = () => {
           </div>
 
           <div className="flex gap-5 mt-10">
-            <a href="https://linkedin.com" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
+            <a href="https://www.linkedin.com/company/geeksforgeeks-rgipt-student-chapter/" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
               <FaLinkedin className="text-xl text-green-400" />
             </a>
-            <a href="https://instagram.com" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
+            <a href="https://www.instagram.com/gfg_rgipt/" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
               <FaInstagram className="text-xl text-green-400" />
             </a>
-            <a href="https://github.com" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
-              <FaGithub className="text-xl text-green-400" />
+            <a href="https://wa.me/918299857823" target="_blank" className="p-3 rounded-full border border-white/10 hover:bg-white/10 transition">
+              <FaWhatsapp className="text-xl text-green-400" />
             </a>
           </div>
         </div>

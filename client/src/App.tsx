@@ -3,7 +3,6 @@ import LoginForm from "./pages/login";
 import SignupForm from "./pages/signup";
 import { Navigate } from "react-router-dom";
 import Home from "./pages/home";
-import About from "./pages/about";
 import Team from "./pages/teams";
 import Resources from "./pages/resources";
 import Navbar from "./components/Navbar";
@@ -17,6 +16,7 @@ import { useAuth } from "./auth/authContext";
 import Background from "./components/GlowBlob";
 import Roadmap from "./pages/Roadmap";
 import Lauch from "./pages/lauch";
+import LaunchPage from "./pages/LaunchPage";
 
 const ProtectedRoute = ({
   children,
@@ -49,7 +49,6 @@ const App = () => {
         <main className="relative z-10">
           <Routes>
             <Route path="/" element={<Navigate to="/home" />} />
-            <Route path="/about" element={<About />} />
             <Route path="/team" element={<Team />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/resources" element={<Resources />} />
@@ -60,6 +59,7 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/lauch" element={<Lauch/>} />
+            <Route path="/launch" element={<LaunchPage />} />
 
             <Route path="/events/:id" element={<EventDetails />} />
              

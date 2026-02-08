@@ -28,17 +28,17 @@ const applicationSchema = new mongoose.Schema(
     preference1: {
       type: String,
       required: true,
-      enum: ["Technical Team", "Design Team", "Media Team"],
+      enum: ["Technical Team", "Design Team" , "Dev Team" , "E-sports Team" , "Logistic Team" , "VideoEditing Team" , "PR-Outreach Team" , "SocialMedia Team" , "Editorial Team"],
     },
 
     preference2: {
       type: String,
-      enum: ["Technical Team", "Design Team", "Media Team"],
+      enum: ["Technical Team", "Design Team" , "Dev Team" , "E-sports Team" , "Logistic Team" , "VideoEditing Team" , "PR-Outreach Team" , "SocialMedia Team" , "Editorial Team"],
     },
 
     preference3: {
       type: String,
-      enum: ["Technical Team", "Design Team", "Media Team"],
+      enum: ["Technical Team", "Design Team" , "Dev Team" , "E-sports Team" , "Logistic Team" , "VideoEditing Team" , "PR-Outreach Team" , "SocialMedia Team" , "Editorial Team"],
     },
 
     skills: [

@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import "./ProfileCard.css";
-import IconPattern from "../assets/iconpattern.png";
-import Grain from "../assets/grain.webp"
 
 interface ProfileCardProps {
   avatarUrl: string;
@@ -60,8 +58,8 @@ const easeInOutCubic = (x: number): number =>
 
 const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   avatarUrl = "<Placeholder for avatar URL>",
-  iconUrl = IconPattern,
-  grainUrl = Grain,
+  iconUrl = "https://res.cloudinary.com/dxaq078zo/image/upload/v1770464335/iconpattern_ow3xgd.png",
+  grainUrl = "https://res.cloudinary.com/dxaq078zo/image/upload/v1770464335/grain_sleajp.webp",
   behindGradient,
   innerGradient,
   showBehindGradient = true,

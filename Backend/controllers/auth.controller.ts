@@ -272,22 +272,18 @@ export const adminSignupHandler = async (
   try {
     const { name, email, password, adminSecret } = req.body;
 
-    // Check secret key
     const expectedSecret = process.env.ADMIN_SIGNUP_SECRET;
     if (!expectedSecret || adminSecret !== expectedSecret) {
       return res.status(401).json({ success: false, message: "Invalid admin secret key" });
     }
 
-    // Check if admin already exists
     const existingAdmin = await User.findOne({ email });
     if (existingAdmin) {
       return res.status(400).json({ success: false, message: "Admin already exists" });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create admin user
     const admin = await User.create({
       name,
       email,
@@ -295,10 +291,15 @@ export const adminSignupHandler = async (
       role: "ADMIN",
     });
 
+    const accessToken = generateAccessToken({ id: admin._id.toString(), role: admin.role });
+    const refreshToken = generateRefreshToken({ id: admin._id.toString(), role: admin.role });
+
     res.json({
       success: true,
       message: "Admin created successfully",
-      admin: { email: admin.email, name: admin.name },
+      user: admin ,
+      accessToken,
+      refreshToken,
     });
   } catch (err) {
     next(err);

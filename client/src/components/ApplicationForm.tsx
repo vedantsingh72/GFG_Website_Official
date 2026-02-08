@@ -34,7 +34,7 @@ const ApplicationForm = ({
     MobileNo: "",
     preference1: "Technical Team",
     preference2: "Design Team",
-    preference3: "Media Team",
+    preference3: "Dev Team",
     reason: "",
     skills: [],
     OtherClubs: [],
