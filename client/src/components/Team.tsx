@@ -50,11 +50,11 @@ export default function TeamMemberList() {
           onLinkedinClick={() => console.log("LinkedIn clicked")}
         />
         <ProfileCard
-          name="Mayank Maurya"
-          title="Technical Head"
+          name="Aushutosh Kumar"
+          title="Technical Executive"
           handle="javicodes"
           status="Online"
-          avatarUrl={Kushagra}
+          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476259/Ashutosh_xjfewc.jpg"
           showUserInfo={true}
           enableTilt={true}
           enableMobileTilt={false}
@@ -64,11 +64,11 @@ export default function TeamMemberList() {
           onLinkedinClick={() => console.log("LinkedIn clicked")}
         />
         <ProfileCard
-          name="Aushutosh Kumar"
-          title="Technical Executive"
+          name="Mayank Maurya"
+          title="Technical Head"
           handle="javicodes"
           status="Online"
-          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770476259/Ashutosh_xjfewc.jpg"
+          avatarUrl="https://res.cloudinary.com/drfwbriwh/image/upload/v1770533762/WhatsApp_Image_2026-02-08_at_12.25.24_cjisvp.jpg"
           showUserInfo={true}
           enableTilt={true}
           enableMobileTilt={false}
