@@ -3,8 +3,15 @@
 export type Team =
   | "Technical Team"
   | "Design Team"
-  | "Media Team";
+  | "Dev Team"
+  | "E-sports Team"
+  | "Logistic Team"
+  | "VideoEditing Team"
+  | "PR-Outreach Team"
+  | "SocialMedia Team"
+  | "Editorial Team";
 
+  
 export type ApplicationStatus =
   | "pending"
   | "accepted"

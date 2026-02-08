@@ -59,7 +59,7 @@ export const refreshTokenSchema = z.object({
   }),
 });
 
-const teams = ["Technical Team", "Design Team", "Media Team"];
+const teams = ["Technical Team", "Design Team" , "Dev Team" , "E-sports Team" , "Logistic Team" , "VideoEditing Team" , "PR-Outreach Team" , "SocialMedia Team" , "Editorial Team"];
 
 export const applicationSchema = z.object({
   body: z

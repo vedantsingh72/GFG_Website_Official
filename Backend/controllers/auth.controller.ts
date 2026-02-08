@@ -297,7 +297,7 @@ export const adminSignupHandler = async (
     res.json({
       success: true,
       message: "Admin created successfully",
-      user: { email: admin.email, name: admin.name },
+      user: admin ,
       accessToken,
       refreshToken,
     });

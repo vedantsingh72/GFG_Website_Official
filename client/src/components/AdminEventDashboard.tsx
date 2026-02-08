@@ -28,7 +28,7 @@ const AdminEventDashboard = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
 
-  // Form States
+  // Initialize form state
   const [editForm, setEditForm] = useState({
     title: event.title,
     description: event.description,
@@ -39,6 +39,32 @@ const AdminEventDashboard = ({
     fields: [...event.fields],
   });
 
+  
+  const handleToggleStatus = async () => {
+    const newStatus = !event.isActive;
+    setIsUpdating(true);
+    try {
+      const formData = new FormData();
+      formData.append("isActive", String(newStatus));
+      
+      // We send existing data to satisfy backend requirements if necessary
+      formData.append("title", event.title);
+      formData.append("description", event.description);
+      formData.append("fields", JSON.stringify(event.fields));
+
+      await updateEvent(event._id, formData);
+      toast.success(newStatus ? "Event is now Live!" : "Event deactivated");
+      refreshEvent();
+    } catch (err: any) {
+      toast.error("Status update failed");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  /**
+   * FULL UPDATE: Handles the entire form submission
+   */
   const handleUpdate = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setIsUpdating(true);
@@ -71,57 +97,60 @@ const AdminEventDashboard = ({
       name: `field_${Date.now()}`,
       type: "text",
       required: false,
-      options: [],
     };
     setEditForm({ ...editForm, fields: [...editForm.fields, newField] });
   };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-500">
-      {/* Header Info */}
+      {/* Header section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-8">
         <div>
           <span
-            className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md mb-2 inline-block ${event.isActive ? "bg-green-500/20 text-green-500" : "bg-yellow-500/20 text-yellow-500"}`}
+            className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-md mb-2 inline-block ${
+              event.isActive
+                ? "bg-green-500/20 text-green-500"
+                : "bg-yellow-500/20 text-yellow-500"
+            }`}
           >
             {event.isActive ? "Live" : "Draft Mode"}
           </span>
           <h1 className="text-4xl font-black text-white">{event.title}</h1>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={() => navigate(`/events`)}
-            className="text-gray-500 hover:text-white text-sm font-bold transition-colors"
-          >
-            Return to List
-          </button>
-        </div>
+        <button
+          onClick={() => navigate(`/events`)}
+          className="text-gray-500 hover:text-white text-sm font-bold transition-colors"
+        >
+          Back to Events
+        </button>
       </div>
 
       {!showEditor ? (
+        /* MAIN DASHBOARD CARDS */
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <AdminCard
             title="Participants"
-            desc="View registration data."
+            desc="Manage registrations & data."
             icon={<Users className="text-blue-500" />}
             onClick={() => navigate(`/events/responses/${event._id}`)}
           />
           <AdminCard
-            title="Edit Form"
-            desc="Change fields & details."
+            title="Edit Configuration"
+            desc="Modify fields and deadlines."
             icon={<Edit className="text-purple-500" />}
             onClick={() => setShowEditor(true)}
           />
           <div
-            onClick={() => {
-              setEditForm({ ...editForm, isActive: !event.isActive });
-              handleUpdate();
-            }}
-            className="bg-[#0e0e0e] border border-white/10 p-6 rounded-3xl hover:border-green-500/50 transition-all cursor-pointer group"
+            onClick={handleToggleStatus}
+            className={`bg-[#0e0e0e] border p-6 rounded-3xl transition-all cursor-pointer group ${
+              event.isActive ? "border-green-500/30 hover:border-red-500/50" : "border-white/10 hover:border-green-500/50"
+            }`}
           >
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 bg-white/5 rounded-2xl">
-                {event.isActive ? (
+                {isUpdating ? (
+                  <div className="h-6 w-6 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+                ) : event.isActive ? (
                   <ToggleRight className="text-green-500" size={24} />
                 ) : (
                   <ToggleLeft className="text-gray-500" size={24} />
@@ -129,10 +158,10 @@ const AdminEventDashboard = ({
               </div>
             </div>
             <h3 className="text-lg font-bold text-white group-hover:text-green-500">
-              {event.isActive ? "Deactivate" : "Publish"}
+              {event.isActive ? "Deactivate" : "Publish Event"}
             </h3>
             <p className="text-gray-500 text-xs mt-1">
-              Switch between Public and Draft.
+              {event.isActive ? "Click to take event offline." : "Click to go live."}
             </p>
           </div>
         </div>
@@ -144,8 +173,7 @@ const AdminEventDashboard = ({
         >
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Edit size={20} className="text-green-500" /> Edit Event
-              Configuration
+              <Edit size={20} className="text-green-500" /> Event Settings
             </h2>
             <button
               type="button"
@@ -156,136 +184,132 @@ const AdminEventDashboard = ({
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <input
-                className="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:border-green-500 outline-none"
-                value={editForm.title}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, title: e.target.value })
-                }
-                placeholder="Event Title"
-              />
-              <textarea
-                className="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:border-green-500 outline-none h-32"
-                value={editForm.description}
-                onChange={(e) =>
-                  setEditForm({ ...editForm, description: e.target.value })
-                }
-                placeholder="Event Description"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Left: Metadata */}
+            <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest ml-1">
-                  Deadline
-                </label>
-                <div className="relative group">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Event Title</label>
+                <input
+                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:border-green-500 outline-none"
+                  value={editForm.title}
+                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Description</label>
+                <textarea
+                  className="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:border-green-500 outline-none h-32"
+                  value={editForm.description}
+                  onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase tracking-widest ml-1">Deadline</label>
+                <div className="relative">
                   <input
                     type="datetime-local"
                     style={{ colorScheme: "dark" }}
-                    className="w-full bg-black border border-white/10 rounded-xl p-3 text-white 
-                 focus:border-green-500 outline-none
-                 /* These lines make the calendar icon visible in dark mode */
-                 [&::-webkit-calendar-picker-indicator]:invert 
-                 [&::-webkit-calendar-picker-indicator]:opacity-70 
-                 cursor-pointer"
-                    value={
-                      editForm.deadline ? editForm.deadline.slice(0, 16) : ""
-                    }
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, deadline: e.target.value })
-                    }
-                  />
-                  <CalendarIcon
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none group-hover:text-green-500 transition-colors"
-                    size={18}
+                    className="w-full bg-black border border-white/10 rounded-xl p-3 text-white focus:border-green-500 outline-none [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-calendar-picker-indicator]:opacity-70"
+                    value={editForm.deadline}
+                    onChange={(e) => setEditForm({ ...editForm, deadline: e.target.value })}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4">
+            {/* Right: Registration Form Builder */}
+            <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <p className="text-xs font-bold text-gray-500 uppercase">
-                  Registration Fields
-                </p>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Custom Form Fields</p>
                 <button
                   type="button"
                   onClick={addField}
-                  className="text-green-500 text-xs flex items-center gap-1 hover:underline"
+                  className="text-green-500 text-xs font-bold hover:bg-green-500/10 px-2 py-1 rounded transition-all flex items-center gap-1"
                 >
-                  <Plus size={14} /> Add Field
+                  <Plus size={14} /> New Field
                 </button>
               </div>
-              <div className="max-h-64 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                 {editForm.fields.map((f, i) => (
-                  <div
-                    key={i}
-                    className="flex gap-2 items-center bg-white/5 p-3 rounded-xl border border-white/5"
-                  >
-                    <input
-                      className="flex-1 bg-transparent text-sm text-white outline-none"
-                      value={f.label}
-                      onChange={(e) => {
-                        const newFields = [...editForm.fields];
-                        newFields[i].label = e.target.value;
-                        setEditForm({ ...editForm, fields: newFields });
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setEditForm({
+                  <div key={i} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex flex-col gap-3">
+                    <div className="flex gap-2">
+                      <input
+                        placeholder="Label (e.g. Phone Number)"
+                        className="flex-1 bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:border-green-500 outline-none"
+                        value={f.label}
+                        onChange={(e) => {
+                          const newFields = [...editForm.fields];
+                          newFields[i].label = e.target.value;
+                          setEditForm({ ...editForm, fields: newFields });
+                        }}
+                      />
+                      
+                      <select 
+                        className="bg-black border border-white/10 rounded-lg px-2 py-2 text-xs text-gray-400 outline-none cursor-pointer"
+                        value={f.type}
+                        onChange={(e) => {
+                          const newFields = [...editForm.fields];
+                          newFields[i].type = e.target.value as FieldType;
+                          setEditForm({ ...editForm, fields: newFields });
+                        }}
+                      >
+                        <option value="text">Text</option>
+                        <option value="email">Email</option>
+                        <option value="number">Number</option>
+                        <option value="date">Date</option>
+                        <option value="textarea">Large Text</option>
+                        <option value="checkbox">Checkbox</option>
+                      </select>
+
+                      <button
+                        type="button"
+                        onClick={() => setEditForm({
                           ...editForm,
                           fields: editForm.fields.filter((_, idx) => idx !== i),
-                        })
-                      }
-                      className="text-red-500/50 hover:text-red-500"
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                        })}
+                        className="text-gray-600 hover:text-red-500 transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="pt-4 flex gap-4">
+          <div className="pt-4">
             <button
               type="submit"
               disabled={isUpdating}
-              className="flex-1 py-4 bg-green-600 hover:bg-green-500 text-black font-bold rounded-2xl flex items-center justify-center gap-2"
+              className="w-full py-4 bg-green-600 hover:bg-green-500 text-black font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95"
             >
-              {isUpdating ? (
-                <div className="h-5 w-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <>
-                  <Save size={18} /> Save All Changes
-                </>
-              )}
+              {isUpdating ? <div className="h-5 w-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : "Save All Changes"}
             </button>
           </div>
         </form>
       )}
 
-      {/* Preview Section */}
+      {/* Quick Preview Area */}
       <div className="bg-[#0e0e0e] border border-white/10 rounded-3xl p-8">
-        <h3 className="text-xs font-black text-gray-500 uppercase tracking-widest mb-6 flex items-center gap-2">
-          <Eye size={14} /> Quick Preview
+        <h3 className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+          <Eye size={14} /> Poster Preview
         </h3>
-        <div className="opacity-50 pointer-events-none scale-95 origin-top">
+        <div className="opacity-40  pointer-events-none scale-95 origin-top">
           <img
             src={event.image.url}
+            alt="Event Poster"
             className="w-full h-48 object-cover rounded-2xl mb-4"
           />
-          <p className="text-gray-400 text-sm italic line-clamp-2">
-            {event.description}
-          </p>
+          <p className="text-gray-400 text-sm line-clamp-1 italic">{event.description}</p>
         </div>
       </div>
     </div>
   );
 };
 
+// Sub-component for Dashboard Cards
 const AdminCard = ({ title, desc, icon, onClick }: any) => (
   <div
     onClick={onClick}
@@ -298,7 +322,7 @@ const AdminCard = ({ title, desc, icon, onClick }: any) => (
         size={18}
       />
     </div>
-    <h3 className="text-lg font-bold text-white">{title}</h3>
+    <h3 className="text-lg font-bold text-white group-hover:text-green-500">{title}</h3>
     <p className="text-gray-500 text-xs mt-1">{desc}</p>
   </div>
 );
