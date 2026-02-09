@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import Application from "../models/Application.model";
 import User from "../models/User.model";
 
@@ -20,7 +21,7 @@ export const getexistingApplication = async(userId:string) =>{
 
 
 export const allApplication = async()=>{
-    return await Application.find();
+    return await Application.find().populate('user');
 }
 
 export const deleteForm = async(userId:string)=>{

@@ -54,7 +54,7 @@ const AdminApplications = ({ applications }: { applications: Application[] }) =>
 
       setData((prev) =>
         prev.map((app) =>
-          app.user === userId ? { ...app, status: updatedForm.status } : app
+          app.user._id === userId ? { ...app, status: updatedForm.status } : app
         )
       );
       toast.success(`Status updated to ${status}`);
@@ -95,7 +95,7 @@ const AdminApplications = ({ applications }: { applications: Application[] }) =>
 
                     <div>
                       <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                        {app.rollNo}
+                        {app.user.name} | {app.rollNo}
                         <span className={`text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full border ${statusMeta.bg} ${statusMeta.color} ${statusMeta.border}`}>
                           {app.status}
                         </span>
@@ -115,11 +115,11 @@ const AdminApplications = ({ applications }: { applications: Application[] }) =>
                       {(["pending", "accepted", "rejected"] as ApplicationStatus[]).map((s) => (
                         <button
                           key={s}
-                          disabled={updatingUser === app.user || app.status === s}
-                          onClick={() => handleStatusChange(app.user, s)}
+                          disabled={updatingUser === app.user._id || app.status === s}
+                          onClick={() => handleStatusChange(app.user._id, s)}
                           className={`px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 capitalize
                             ${app.status === s ? "bg-white/10 text-white shadow-inner" : "text-gray-500 hover:text-white hover:bg-white/5"}
-                            ${updatingUser === app.user ? "opacity-50 cursor-not-allowed" : ""}`}
+                            ${updatingUser === app.user._id ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                           {s}
                         </button>
@@ -186,7 +186,7 @@ const AdminApplications = ({ applications }: { applications: Application[] }) =>
                 )}
 
                 {/* Loading Overlay */}
-                {updatingUser === app.user && (
+                {updatingUser === app.user._id && (
                   <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] rounded-2xl flex items-center justify-center z-10">
                     <div className="flex items-center gap-2 text-green-500 font-medium">
                       <div className="h-4 w-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />

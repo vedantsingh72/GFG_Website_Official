@@ -30,7 +30,10 @@ export interface ApplyApplicationPayload {
 
 export interface Application {
   _id: string;
-  user: string;              
+  user: {
+    _id :string
+    name:string
+  };              
   rollNo: string;
   MobileNo: string;
   preference1: Team;
