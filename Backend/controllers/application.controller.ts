@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import ExcelJS from "exceljs";
 import {
   allApplication,
   createApplication,
@@ -217,8 +218,89 @@ export const withdrawApplicationHandler = async (
 
     res.status(201).json({
       sucess: true,
-      message:"You application has been deleted",
+      message: "You application has been deleted",
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+export const exportApplicationsToExcel = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const role = req.role;
+
+    if (role === "USER") {
+      return res.status(403).json({
+        success: false,
+        message: "Only admins can export applications",
+      });
+    }
+
+    const applications = await allApplication();
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Applications");
+
+    worksheet.columns = [
+      { header: "Name", key: "name", width: 25 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Roll No", key: "rollNo", width: 15 },
+      { header: "Mobile No", key: "mobileNo", width: 15 },
+      { header: "Preference 1", key: "preference1", width: 20 },
+      { header: "Preference 2", key: "preference2", width: 20 },
+      { header: "Preference 3", key: "preference3", width: 20 },
+      { header: "Skills", key: "skills", width: 30 },
+      { header: "Reason", key: "reason", width: 40 },
+      { header: "Other Clubs", key: "otherClubs", width: 25 },
+      { header: "Status", key: "status", width: 12 },
+      { header: "Applied At", key: "createdAt", width: 22 },
+    ];
+
+    // Style the header row
+    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).fill = {
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FF2F8D46" },
+    };
+    worksheet.getRow(1).font = { bold: true, color: { argb: "FFFFFFFF" } };
+
+    for (const app of applications) {
+      const user = app.user as any;
+      worksheet.addRow({
+        name: user?.name || "N/A",
+        email: user?.email || "N/A",
+        rollNo: app.rollNo,
+        mobileNo: app.MobileNo,
+        preference1: app.preference1,
+        preference2: app.preference2 || "N/A",
+        preference3: app.preference3 || "N/A",
+        skills: app.skills?.join(", ") || "N/A",
+        reason: app.reason,
+        otherClubs: app.OtherClubs?.join(", ") || "N/A",
+        status: app.status,
+        createdAt: app.createdAt
+          ? new Date(app.createdAt).toLocaleString()
+          : "N/A",
+      });
+    }
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=applications.xlsx",
+    );
+
+    await workbook.xlsx.write(res);
+    res.end();
   } catch (err) {
     next(err);
   }

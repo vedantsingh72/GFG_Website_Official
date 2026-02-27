@@ -63,3 +63,22 @@ export const updateApplicationStatus = async (
   );
   return res.data;
 };
+
+
+export const exportApplicationsToExcel = async (): Promise<void> => {
+  const res = await api.get("/application/export", {
+    responseType: "blob",
+  });
+
+  const blob = new Blob([res.data], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "applications.xlsx";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};
