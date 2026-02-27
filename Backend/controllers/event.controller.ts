@@ -39,6 +39,7 @@ export const createEventHandler = async (
       title: req.body.title,
       description: req.body.description,
       deadline: req.body.deadline ? new Date(req.body.deadline) : null,
+      isActive: req.body.isActive === "true" || req.body.isActive === true,
       image: {
         url: uploadResult.secure_url,
         publicId: uploadResult.public_id,

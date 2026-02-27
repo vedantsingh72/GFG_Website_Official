@@ -152,6 +152,11 @@ export const createEventSchema = z.object({
 
     deadline: z.string().or(z.date()),
 
+    isActive: z
+      .preprocess((val) => val === "true" || val === true, z.boolean())
+      .optional()
+      .default(true),
+
     fields: z
       .array(
         z.object({

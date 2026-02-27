@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Event, EventField, FieldType } from "../types/event.types";
-import { updateEvent } from "../services/event.service";
+import { updateEvent , deleteEvent } from "../services/event.service";
 import {
   Users,
   Edit,
@@ -38,6 +38,17 @@ const AdminEventDashboard = ({
     isActive: event.isActive,
     fields: [...event.fields],
   });
+
+  const handleDeleteEvent = async ()=>{
+    try{
+      await deleteEvent(event._id);
+      navigate(`/events`);
+      toast.success("Event Deleted");
+    }catch{
+      toast.error("Deletion failed");
+    }
+    
+  }
 
   
   const handleToggleStatus = async () => {
@@ -305,6 +316,10 @@ const AdminEventDashboard = ({
           <p className="text-gray-400 text-sm line-clamp-1 italic">{event.description}</p>
         </div>
       </div>
+
+      <button onClick={handleDeleteEvent} className="bg-red-600 hover:bg-red-500 hover:cursor-pointer text-black px-6 py-3 rounded-2xl font-black flex items-center gap-2 transition-all shadow-lg shadow-green-900/20">
+            Delete Event
+        </button>
     </div>
   );
 };

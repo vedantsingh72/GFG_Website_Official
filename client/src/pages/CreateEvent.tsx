@@ -25,7 +25,7 @@ const CreateEvent = () => {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string>("");
-  const [isActive, setIsActive] = useState(true); // Default to Public
+  const [isActive, setIsActive] = useState(true); 
 
   const [form, setForm] = useState({
     title: "",
