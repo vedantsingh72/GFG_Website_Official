@@ -225,6 +225,7 @@ export const withdrawApplicationHandler = async (
   }
 };
 
+
 export const exportApplicationsToExcel = async (
   req: Request,
   res: Response,
@@ -246,21 +247,20 @@ export const exportApplicationsToExcel = async (
     const worksheet = workbook.addWorksheet("Applications");
 
     worksheet.columns = [
-      { header: "Name", key: "name" },
-      { header: "Email", key: "email" },
-      { header: "Roll No", key: "rollNo" },
-      { header: "Mobile No", key: "mobileNo" },
-      { header: "Preference 1", key: "preference1" },
-      { header: "Preference 2", key: "preference2" },
-      { header: "Preference 3", key: "preference3" },
-      { header: "Skills", key: "skills" },
-      { header: "Reason", key: "reason" },
-      { header: "Other Clubs", key: "otherClubs" },
-      { header: "Status", key: "status" },
-      { header: "Applied At", key: "createdAt" },
+      { header: "Name", key: "name", width: 25 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Roll No", key: "rollNo", width: 15 },
+      { header: "Mobile No", key: "mobileNo", width: 15 },
+      { header: "Preference 1", key: "preference1", width: 20 },
+      { header: "Preference 2", key: "preference2", width: 20 },
+      { header: "Preference 3", key: "preference3", width: 20 },
+      { header: "Skills", key: "skills", width: 30 },
+      { header: "Reason", key: "reason", width: 40 },
+      { header: "Other Clubs", key: "otherClubs", width: 25 },
+      { header: "Status", key: "status", width: 12 },
+      { header: "Applied At", key: "createdAt", width: 22 },
     ];
 
-    // Style the header row
     worksheet.getRow(1).font = { bold: true };
     worksheet.getRow(1).fill = {
       type: "pattern",
@@ -288,17 +288,6 @@ export const exportApplicationsToExcel = async (
           : "N/A",
       });
     }
-
-    worksheet.columns.forEach((column) => {
-      let maxLength = column.header ? column.header.toString().length : 10;
-      column.eachCell?.({ includeEmpty: true }, (cell) => {
-        const cellLength = cell.value ? cell.value.toString().length : 0;
-        if (cellLength > maxLength) {
-          maxLength = cellLength;
-        }
-      });
-      column.width = maxLength + 4;
-    });
 
     res.setHeader(
       "Content-Type",
