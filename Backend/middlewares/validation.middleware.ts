@@ -27,7 +27,12 @@ export const validate = (schema: ZodSchema) => {
 
 export const signupSchema = z.object({
   body: z.object({
-    email: z.string().email(),
+    email: z
+      .string()
+      .regex(
+        /^\d{2}[a-zA-Z]{2}\d{4}@rgipt\.ac\.in$/,
+        "Email must be of form 24cs3013@rgipt.ac.in"
+      ),
 
     password: z
       .string()
