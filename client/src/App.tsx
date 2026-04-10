@@ -50,12 +50,10 @@ const App = () => {
             <Route path="/team" element={<Team />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/resources" element={<Resources />} />
-            <Route path="/join" element={<ApplicationPage />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/launch" element={<Lauch/>} />
             <Route path="/events/:id" element={<EventDetails />} />
              
 
