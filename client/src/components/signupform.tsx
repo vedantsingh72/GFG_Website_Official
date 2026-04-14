@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link , useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { signup, signupAdmin, googleLogin } from "../services/auth.service"; // Ensure signupAdmin is imported
 import { Mail, Lock, User, ShieldCheck, ArrowRight } from "lucide-react";
@@ -16,13 +16,15 @@ const SignupForm = () => {
   const { loginUser } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState("");
-
+  const location = useLocation();
+  const from = (location.state as any)?.from || "/home";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     
     try {
+
       let res;
       if (isAdmin) {
         if (!formData.adminSecret) {
@@ -43,9 +45,11 @@ const SignupForm = () => {
         );
       }
 
+      
+
       if (res.success) {
         loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
-        navigate("/home");
+        navigate(from, { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Signup failed. Please check your credentials.");
@@ -67,7 +71,7 @@ const SignupForm = () => {
       const res = await googleLogin(credentialResponse.credential);
       if (res.success) {
         loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
-        navigate("/home");
+        navigate(from, { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Google login failed");
@@ -187,7 +191,7 @@ const SignupForm = () => {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-green-500 hover:underline">
+          <Link to="/login" state={location.state} className="text-green-500 hover:underline">
             Log in
           </Link>
         </p>

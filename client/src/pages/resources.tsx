@@ -179,7 +179,7 @@ const Resources = () => {
           {branches.map((branch) => (
             <div
               key={branch.id}
-              className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] hover:scale-[1.03] transition"
+              className="rounded-2xl overflow-hidden border border-white/10 bg-black/10 backdrop-blur-md  hover:scale-[1.03] transition"
             >
               <img
                 src={branch.image}
@@ -253,7 +253,7 @@ const Resources = () => {
                 {roadmaps.map((roadmap) => (
                   <div
                     key={roadmap.id}
-                    className="rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03] hover:scale-[1.03] transition"
+                    className="rounded-2xl overflow-hidden border border-white/10 bg-black/10 backdrop-blur-md hover:scale-[1.03] transition"
                   >
                     <img
                       src={roadmap.image}
@@ -283,7 +283,7 @@ const Resources = () => {
                     key={course.id}
                     href={course.link}
                     target="_blank"
-                    className="rounded-xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] hover:shadow-[0_0_25px_rgba(34,197,94,0.35)] transition"
+                    className="rounded-xl border border-white/10 bg-black/10 backdrop-blur-md p-6 hover:bg-white/[0.06] hover:shadow-[0_0_25px_rgba(34,197,94,0.35)] transition"
                   >
                     <h3 className="text-lg font-bold mb-2">{course.name}</h3>
                     <p className="text-sm text-gray-400">

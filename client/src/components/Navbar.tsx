@@ -9,14 +9,13 @@ const Navbar = () => {
   const location = useLocation();
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
 
   const navLinks = [
     { name: "EVENTS", path: "/events" },
+    { name: "CODEFOLIO", path: "/codefolio" },
     { name: "TEAM", path: "/team" },
     { name: "RESOURCES", path: "/resources" },
     { name: "CONTACT", path: "/contact" },
@@ -81,10 +80,10 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-2">
-              <Link to="/login" className="text-gray-400 hover:text-white text-xs font-bold px-4 transition-colors">
+              <Link to="/login"  state={{ from: location.pathname + location.search }} className="text-gray-400 hover:text-white text-xs font-bold px-4 transition-colors">
                 Login
               </Link>
-              <Link to="/signup">
+              <Link to="/signup" state={{ from: location.pathname + location.search }}>
                 <button className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded-xl font-bold text-xs transition-all flex items-center gap-1">
                   Sign Up
                 </button>
@@ -130,8 +129,8 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-4">
-                <Link to="/login" className="text-gray-300 font-bold">Login</Link>
-                <Link to="/signup" className="w-full">
+                <Link to="/login" state={{ from: location.pathname + location.search }} className="text-gray-300 font-bold">Login</Link>
+                <Link to="/signup" state={{ from: location.pathname + location.search }}  className="w-full">
                   <button className="w-full bg-green-600 py-3 rounded-xl font-bold text-black">Sign Up</button>
                 </Link>
               </div>

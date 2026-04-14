@@ -15,6 +15,7 @@ import EventResponses from "./pages/EventResponses";
 import { useAuth } from "./auth/authContext";
 import Background from "./components/GlowBlob";
 import Lauch from "./pages/lauch";
+import ProfilesPage from "./pages/PlatformPage";
 
 const ProtectedRoute = ({
   children,
@@ -55,6 +56,7 @@ const App = () => {
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/home" element={<Home />} />
             <Route path="/events/:id" element={<EventDetails />} />
+            <Route path="/codefolio" element={<ProfilesPage />} />
              
 
             <Route

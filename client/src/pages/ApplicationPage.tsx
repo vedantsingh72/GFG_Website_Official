@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/authContext";
-import { Link } from "react-router-dom"; // Import Link for buttons
+import { Link , useLocation } from "react-router-dom"; // Import Link for buttons
 import { Lock } from "lucide-react"; // Import a lock icon
 import {
   getAllApplications,
@@ -16,7 +16,7 @@ const ApplicationPage = () => {
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [allApplications, setAllApplications] = useState<Application[]>([]);
-
+  const location = useLocation();
   useEffect(() => {
     const fetchData = async () => {
 
@@ -78,13 +78,13 @@ const ApplicationPage = () => {
             </p>
             <div className="flex flex-col gap-3">
               <Link
-                to="/login"
+                to="/login" 
                 className="w-full py-3 bg-green-600 hover:bg-green-500 text-black font-bold rounded-xl transition-all"
               >
                 Login to Account
               </Link>
               <Link
-                to="/signup"
+                to="/signup" state={{ from: location.pathname + location.search }}
                 className="w-full py-3 bg-white/5 hover:bg-white/10 text-white font-bold rounded-xl border border-white/10 transition-all"
               >
                 Create New Account

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link,useLocation } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { login, googleLogin } from "../services/auth.service";
 import { Mail, Lock, ArrowRight } from "lucide-react";
@@ -14,6 +14,9 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const location = useLocation();
+  const from = (location.state as any)?.from || "/home";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -23,7 +26,7 @@ const LoginForm = () => {
       const res = await login(formData.email, formData.password);
       if (res.success) {
         loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
-        navigate("/home");
+        navigate(from, { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password");
@@ -42,7 +45,7 @@ const LoginForm = () => {
       const res = await googleLogin(credentialResponse.credential);
       if (res.success) {
         loginUser(res.accessToken, { ...res.user, name: res.user.name || undefined });
-        navigate("/home");
+        navigate(from, { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Google login failed");
@@ -123,7 +126,7 @@ const LoginForm = () => {
         {/* Footer */}
         <p className="text-center text-sm text-gray-500 mt-6">
           Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-green-500 hover:underline">
+          <Link to="/signup" state={location.state} className="text-green-500 hover:underline">
             Create one
           </Link>
         </p>

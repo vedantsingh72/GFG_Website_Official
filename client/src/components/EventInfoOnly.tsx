@@ -1,8 +1,9 @@
 import { Event } from "../types/event.types";
 import { Calendar, Info, Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link , useLocation } from "react-router-dom";
 
 const EventInfoOnly = ({ event, message, showLoginPrompt }: { event: Event, message: string, showLoginPrompt?: boolean }) => {
+  const location = useLocation();
   return (
     <div className="max-w-5xl mx-auto animate-in fade-in duration-700">
       {/* FULL UNCHOPPED IMAGE */}
@@ -31,7 +32,7 @@ const EventInfoOnly = ({ event, message, showLoginPrompt }: { event: Event, mess
                 </div>
                 <h3 className="text-white font-bold text-xl">Sign in to Join</h3>
                 <p className="text-gray-500 text-sm">Registration is open, but you need an account to apply.</p>
-                <Link to="/login" className="block w-full py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-2xl transition-all">
+                <Link to="/login" state={{ from: location.pathname + location.search }}  className="block w-full py-4 bg-green-600 hover:bg-green-500 text-black font-black rounded-2xl transition-all">
                   LOGIN TO APPLY
                 </Link>
               </div>
