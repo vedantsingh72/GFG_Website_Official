@@ -82,9 +82,9 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Link to={"/join"}>
+              <Link to={"/codefolio"}>
                 <button className="group px-10 py-4 bg-green-500 text-black font-bold rounded-xl hover:bg-green-400 transition-all flex items-center gap-2 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
-                  JOIN THE CHAPTER
+                  JOIN THE COMMUNITY
                   <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
